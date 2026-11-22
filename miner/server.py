@@ -1,4 +1,4 @@
-"""SLAWitness Miner — a Telegraph miner for SERVER_UPTIME_MONITOR.
+"""DownProof Miner — a Telegraph miner for SERVER_UPTIME_MONITOR.
 
 Run:  python3 miner/server.py   (listens on :8080, override with PORT)
 POST /query  {"url": "https://example.com", "max_latency_ms": 1000}
@@ -15,7 +15,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from monitor import check_url, sla_verdict
 
 YAML = """\
-name: slawitness-uptime
+name: downproof-uptime
 description: Deterministic server uptime and SLA compliance checks.
 intents:
   - SERVER_UPTIME_MONITOR
@@ -42,7 +42,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/health":
-            self._send(200, {"ok": True, "miner": "slawitness-uptime", "intents": ["SERVER_UPTIME_MONITOR", "SLA_COMPLIANCE"]})
+            self._send(200, {"ok": True, "miner": "downproof-uptime", "intents": ["SERVER_UPTIME_MONITOR", "SLA_COMPLIANCE"]})
         elif self.path == "/telegraph.yaml":
             self._send(200, YAML, "text/yaml")
         else:
@@ -73,5 +73,5 @@ class Handler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8080"))
-    print(f"SLAWitness miner listening on :{port}")
+    print(f"DownProof miner listening on :{port}")
     ThreadingHTTPServer(("0.0.0.0", port), Handler).serve_forever()

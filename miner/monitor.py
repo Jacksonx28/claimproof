@@ -29,7 +29,7 @@ def check_url(url: str, timeout_s: float = 5.0) -> UptimeResult:
     if not url.startswith(("http://", "https://")):
         return UptimeResult(url, False, None, 0, "url must start with http:// or https://",
                              f"{url} is DOWN: invalid URL scheme")
-    req = urllib.request.Request(url, method="GET", headers={"User-Agent": "SLAWitness-Miner/0.1"})
+    req = urllib.request.Request(url, method="GET", headers={"User-Agent": "DownProof-Miner/0.1"})
     start = time.perf_counter()
     try:
         with urllib.request.urlopen(req, timeout=timeout_s) as resp:
