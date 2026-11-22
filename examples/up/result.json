@@ -1,15 +1,15 @@
 {
   "url": "https://example.com",
   "provider": "Example ISP",
-  "checked_at": "2026-11-22T12:05:52.999651+00:00",
+  "checked_at": "2026-11-22T15:56:38.640501+00:00",
   "mode": "LOCAL-DEMO (not a Telegraph purchase)",
   "answer": {
     "url": "https://example.com",
     "is_up": true,
     "status_code": 200,
-    "latency_ms": 678,
+    "latency_ms": 957,
     "error": null,
-    "summary": "https://example.com is UP: HTTP 200 in 678ms",
+    "summary": "https://example.com is UP: HTTP 200 in 957ms",
     "sla": {
       "breached": false,
       "max_latency_ms": 1000,
@@ -25,9 +25,9 @@
         "url": "https://example.com",
         "is_up": true,
         "status_code": 200,
-        "latency_ms": 678,
+        "latency_ms": 957,
         "error": null,
-        "summary": "https://example.com is UP: HTTP 200 in 678ms",
+        "summary": "https://example.com is UP: HTTP 200 in 957ms",
         "sla": {
           "breached": false,
           "max_latency_ms": 1000,
@@ -50,5 +50,5 @@
   "claim_window_days": null,
   "claim_deadline": null,
   "claim_text": null,
-  "no_breach_text": "SLA met \u2014 no claim filed\nService: https://example.com (Example ISP)\nChecked: 2026-11-22 12:05 UTC \u2014 1 check(s), all within the SLA\nEvidence: https://example.com is UP: HTTP 200 in 678ms\nMode: LOCAL-DEMO (not a Telegraph purchase) | Receipt: LOCAL-DEMO\nCost of proof: $0.00\nThis record exists so a provider (and a judge) can see SLAWitness talks users out of false claims, not just into real ones."
+  "no_breach_text": "SLA met \u2014 no claim filed\nService: https://example.com (Example ISP)\nChecked: 2026-11-22 15:56 UTC \u2014 1 check(s), all within the SLA\nEvidence: https://example.com is UP: HTTP 200 in 957ms\nMode: LOCAL-DEMO (not a Telegraph purchase) | Receipt: LOCAL-DEMO\nCost of proof: $0.00\nThis record exists so a provider (and a judge) can see DownProof talks users out of false claims, not just into real ones."
 }
