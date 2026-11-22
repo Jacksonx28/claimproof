@@ -1,0 +1,80 @@
+"""DownProof Miner — Vercel serverless entry point.
+
+Exposes the same three routes as miner/server.py, with identical
+request/response shapes, as a WSGI callable named ``app``:
+
+POST /query           {"url": "https://example.com", "max_latency_ms": 1000}
+GET  /health
+GET  /telegraph.yaml  (the config you pin when registering on Telegraph)
+
+All check logic is reused from miner/monitor.py and the YAML is reused
+from miner/server.py — nothing is duplicated here. Stdlib only.
+"""
+from __future__ import annotations
+
+import json
+import os
+import sys
+
+# Make the repo root and the miner package importable regardless of the
+# working directory Vercel runs this function from.
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_ROOT = os.path.dirname(_HERE)
+_MINER = os.path.join(_ROOT, "miner")
+for _p in (_ROOT, _MINER):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+
+from monitor import check_url, sla_verdict  # noqa: E402  (miner/monitor.py)
+import server as _miner_server  # noqa: E402  (miner/server.py, for the YAML)
+
+YAML = _miner_server.YAML
+
+_STATUS = {200: "200 OK", 400: "400 Bad Request", 404: "404 Not Found"}
+
+
+def _respond(start_response, code: int, body, ctype: str = "application/json"):
+    data = body.encode() if isinstance(body, str) else json.dumps(body).encode()
+    start_response(_STATUS[code], [
+        ("Content-Type", ctype),
+        ("Content-Length", str(len(data))),
+    ])
+    return [data]
+
+
+def app(environ, start_response):
+    method = environ.get("REQUEST_METHOD", "GET")
+    path = environ.get("PATH_INFO", "/")
+
+    if method == "GET":
+        if path == "/health":
+            return _respond(start_response, 200, {
+                "ok": True,
+                "miner": "downproof-uptime",
+                "intents": ["SERVER_UPTIME_MONITOR", "SLA_COMPLIANCE"],
+            })
+        if path == "/telegraph.yaml":
+            return _respond(start_response, 200, YAML, "text/yaml")
+        return _respond(start_response, 404, {"error": "not found"})
+
+    if method == "POST":
+        if path != "/query":
+            return _respond(start_response, 404, {"error": "not found"})
+        try:
+            length = int(environ.get("CONTENT_LENGTH") or 0)
+        except (TypeError, ValueError):
+            length = 0
+        raw = environ["wsgi.input"].read(length) if length > 0 else b""
+        try:
+            payload = json.loads(raw or b"{}")
+        except Exception:
+            return _respond(start_response, 400, {"error": "invalid JSON body"})
+        url = payload.get("url", "")
+        if not url:
+            return _respond(start_response, 400, {"error": "missing 'url'"})
+        result = check_url(url, timeout_s=float(payload.get("timeout_s", 5)))
+        out = result.to_dict()
+        out["sla"] = sla_verdict(result, max_latency_ms=int(payload.get("max_latency_ms", 1000)))
+        return _respond(start_response, 200, out)
+
+    return _respond(start_response, 404, {"error": "not found"})
