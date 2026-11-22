@@ -1,0 +1,24 @@
+{
+  "url": "https://example.com",
+  "provider": "Example ISP",
+  "checked_at": "2026-11-21T22:43:58.378008+00:00",
+  "mode": "LOCAL-DEMO (not a Telegraph purchase)",
+  "answer": {
+    "url": "https://example.com",
+    "is_up": true,
+    "status_code": 200,
+    "latency_ms": 751,
+    "error": null,
+    "summary": "https://example.com is UP: HTTP 200 in 751ms",
+    "sla": {
+      "breached": false,
+      "max_latency_ms": 1000,
+      "reasons": [],
+      "summary": "SLA MET: service within agreed limits"
+    }
+  },
+  "breached": false,
+  "receipt": "LOCAL-DEMO",
+  "total_cost_usdc": 0.0,
+  "claim_text": null
+}
