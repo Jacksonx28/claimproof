@@ -21,7 +21,7 @@ intents:
   - SERVER_UPTIME_MONITOR
   - SLA_COMPLIANCE
 api:
-  base_url: https://YOUR-PUBLIC-URL.example  # replace after deploying
+  base_url: https://downproof.vercel.app
   endpoints:
     - path: /query
       method: POST
