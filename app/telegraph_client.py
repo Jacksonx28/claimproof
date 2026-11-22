@@ -1,4 +1,4 @@
-"""Telegraph access for SLAWitness.
+"""Telegraph access for DownProof.
 
 Two modes, labelled honestly in every output (hackathon rules require
 accurate claims about what was actually verified):
