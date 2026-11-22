@@ -1,15 +1,15 @@
 {
   "url": "https://nonexistent.invalid",
-  "provider": "Example ISP",
-  "checked_at": "2026-11-22T12:05:53.779523+00:00",
+  "provider": "AWS EC2",
+  "checked_at": "2026-11-22T15:56:39.720383+00:00",
   "mode": "LOCAL-DEMO (not a Telegraph purchase)",
   "answer": {
     "url": "https://nonexistent.invalid",
     "is_up": false,
     "status_code": null,
-    "latency_ms": 105,
+    "latency_ms": 358,
     "error": "Remote end closed connection without response",
-    "summary": "https://nonexistent.invalid is DOWN: RemoteDisconnected after 105ms",
+    "summary": "https://nonexistent.invalid is DOWN: RemoteDisconnected after 358ms",
     "sla": {
       "breached": true,
       "max_latency_ms": 1000,
@@ -27,9 +27,31 @@
         "url": "https://nonexistent.invalid",
         "is_up": false,
         "status_code": null,
-        "latency_ms": 105,
+        "latency_ms": 358,
         "error": "Remote end closed connection without response",
-        "summary": "https://nonexistent.invalid is DOWN: RemoteDisconnected after 105ms",
+        "summary": "https://nonexistent.invalid is DOWN: RemoteDisconnected after 358ms",
+        "sla": {
+          "breached": true,
+          "max_latency_ms": 1000,
+          "reasons": [
+            "service down (error: Remote end closed connection without response)"
+          ],
+          "summary": "SLA BREACHED: service down (error: Remote end closed connection without response)"
+        }
+      },
+      "receipt": "LOCAL-DEMO",
+      "cost_usdc": 0.0
+    },
+    {
+      "mode": "LOCAL-DEMO (not a Telegraph purchase)",
+      "intent": "SERVER_UPTIME_MONITOR",
+      "answer": {
+        "url": "https://nonexistent.invalid",
+        "is_up": false,
+        "status_code": null,
+        "latency_ms": 82,
+        "error": "Remote end closed connection without response",
+        "summary": "https://nonexistent.invalid is DOWN: RemoteDisconnected after 82ms",
         "sla": {
           "breached": true,
           "max_latency_ms": 1000,
@@ -44,15 +66,27 @@
     }
   ],
   "breached": true,
-  "breached_checks": 1,
+  "breached_checks": 2,
   "receipt": "LOCAL-DEMO",
   "receipts": [
+    "LOCAL-DEMO",
     "LOCAL-DEMO"
   ],
   "total_cost_usdc": 0.0,
-  "owed_credit": null,
-  "claim_window_days": null,
-  "claim_deadline": null,
-  "claim_text": "To: Example ISP \u2014 Support / SLA Claims\nFrom: A SLAWitness user\nDate: 2026-11-22 12:05 UTC\nSubject: SLA compensation claim for https://nonexistent.invalid\n\nDear Example ISP team,\n\nAn independent uptime check at the time above found your service in breach of its SLA: SLA BREACHED: service down (error: Remote end closed connection without response)\nProof pack: 1 of 1 independent check(s) breached the SLA.\n- Check 1: https://nonexistent.invalid is DOWN: RemoteDisconnected after 105ms | Mode: LOCAL-DEMO (not a Telegraph purchase) | Receipt: LOCAL-DEMO\n\nCost of proof: $0.00 for 1 check(s).\nRecovered / owed: $0.00. Proof cost: $0.00.\n\nPlease credit the account per the SLA compensation terms and confirm in writing.\n\n\u2014 Generated automatically by SLAWitness",
+  "owed_credit": {
+    "provider_key": "aws-ec2",
+    "provider_label": "AWS EC2 (multi-AZ, region level)",
+    "commitment_pct": 99.99,
+    "uptime_pct": 98.5,
+    "credit_pct": 30,
+    "monthly_bill_usd": 1000.0,
+    "credit_usd": 300.0,
+    "claim_window_days": 60,
+    "source": "https://aws.amazon.com/compute/sla/",
+    "caveat": "Credit is a percentage of the affected service's monthly bill, usually applied as a credit against future bills, not cash. Check the provider's SLA for exclusions."
+  },
+  "claim_window_days": 60,
+  "claim_deadline": "2027-01-21",
+  "claim_text": "To: AWS EC2 \u2014 Support / SLA Claims\nFrom: A DownProof user\nDate: 2026-11-22 15:56 UTC\nSubject: SLA compensation claim for https://nonexistent.invalid\n\nDear AWS EC2 team,\n\nAn independent uptime check at the time above found your service in breach of its SLA: SLA BREACHED: service down (error: Remote end closed connection without response)\nProof pack: 2 of 2 independent check(s) breached the SLA.\n- Check 1: https://nonexistent.invalid is DOWN: RemoteDisconnected after 358ms | Mode: LOCAL-DEMO (not a Telegraph purchase) | Receipt: LOCAL-DEMO\n- Check 2: https://nonexistent.invalid is DOWN: RemoteDisconnected after 82ms | Mode: LOCAL-DEMO (not a Telegraph purchase) | Receipt: LOCAL-DEMO\n\nAmount owed (per your own published SLA table \u2014 AWS EC2 (multi-AZ, region level)):\n- Monthly uptime: 98.5% (commitment 99.99%)\n- Credit tier: 30% of the affected service's monthly bill\n- Monthly bill supplied: $1000.00 -> credit owed: $300.00\n- Source: https://aws.amazon.com/compute/sla/\n- Credit is a percentage of the affected service's monthly bill, usually applied as a credit against future bills, not cash. Check the provider's SLA for exclusions.\n\nClaim window: file by 2027-01-21 (last safe day, 60 days from this check). Missing the window is the most common reason valid claims die.\n\nCost of proof: $0.00 for 2 check(s).\nRecovered / owed: $300.00. Proof cost: $0.00.\n\nPlease credit the account per the SLA compensation terms and confirm in writing.\n\n\u2014 Generated automatically by DownProof",
   "no_breach_text": null
 }
