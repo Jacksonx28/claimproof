@@ -27,6 +27,17 @@ curl -X POST localhost:8080/query -H 'Content-Type: application/json' \
 python3 -m unittest discover -s tests
 ```
 
+## Deploy the miner (public HTTPS URL)
+
+**Vercel (primary, free Hobby tier, no card):** import this GitHub repo at
+vercel.com/new — no build settings needed, root directory = repo root.
+`vercel.json` routes every path to `api/index.py`, a stdlib WSGI adapter that
+serves the same `/query`, `/health` and `/telegraph.yaml` as `miner/server.py`.
+Your deployment URL (e.g. `https://<project>.vercel.app`) is the miner's public URL.
+
+**Render (alternative):** `render.yaml` in the repo root defines the
+`downproof-miner` service running `miner/server.py` directly.
+
 ## Go LIVE on Telegraph (required for a real submission)
 Local demo is *not* a Telegraph purchase and is never claimed as one.
 1. Register for Season II at hackathon.telegraphprotocol.com and pick Mission 15.
