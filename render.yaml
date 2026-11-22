@@ -1,0 +1,16 @@
+# Render Blueprint — one-click deploy of the SLAWitness miner.
+# In the Render dashboard: New -> Blueprint -> connect the public repo,
+# or New -> Web Service and point it at this repo (same settings).
+# The miner is Python stdlib only, so the build step installs nothing.
+services:
+  - type: web
+    name: slawitness-miner
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 miner/server.py
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      # Render sets PORT automatically; miner/server.py already reads it.

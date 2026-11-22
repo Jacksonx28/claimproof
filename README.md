@@ -1,10 +1,10 @@
-# ClaimProof — Telegraph Hackathon Season II
+# SLAWitness — Telegraph Hackathon Season II
 
 **Track 03 (Apps & Agents), Mission 15: Consumer Automation** + **Track 01 (Miners)**
 Intents: `SERVER_UPTIME_MONITOR`, `SLA_COMPLIANCE` — both deterministic, both shared by 2 missions.
 
 ## The problem
-Refunds go unclaimed because proving a disruption is tedious. ClaimProof proves it for you.
+Refunds go unclaimed because proving a disruption is tedious. SLAWitness proves it for you.
 
 ## What it does
 1. You give it a service URL, its provider, and its SLA (e.g. max 1000ms, must be up).
@@ -15,8 +15,8 @@ Refunds go unclaimed because proving a disruption is tedious. ClaimProof proves 
 ## Run it (zero installs, Python 3.10+ stdlib only)
 ```bash
 # App — local demo mode (calls our miner directly, labelled LOCAL-DEMO)
-python3 app/claimproof.py --url https://example.com --provider "Example ISP" --out examples/up
-python3 app/claimproof.py --url https://nonexistent.invalid --provider "Example ISP" --out examples/down
+python3 app/slawitness.py --url https://example.com --provider "Example ISP" --out examples/up
+python3 app/slawitness.py --url https://nonexistent.invalid --provider "Example ISP" --out examples/down
 
 # Miner — the same logic as a callable Telegraph miner service
 python3 miner/server.py            # :8080

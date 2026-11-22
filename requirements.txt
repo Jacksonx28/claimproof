@@ -1,0 +1,2 @@
+# SLAWitness miner + app: Python 3.10+ standard library only — no dependencies.
+# This file exists so hosts like Render have a requirements file to install.
