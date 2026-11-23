@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DownProof — Was your provider down? Find out what you're owed.</title>
+<meta name="description" content="DownProof runs independent uptime checks against your provider's SLA and drafts the compensation claim when the SLA is breached.">
+<style>
+  :root {
+    --bg: #ffffff; --fg: #14202b; --muted: #5b6b7a; --card: #f4f7fa;
+    --border: #d7e0e8; --accent: #0b6bcb; --accent-fg: #ffffff;
+    --ok-bg: #e6f6ec; --ok-fg: #0d6e34; --bad-bg: #fdecec; --bad-fg: #a11313;
+    --input-bg: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d141b; --fg: #e8eef4; --muted: #9db0c1; --card: #16212c;
+      --border: #2b3d4e; --accent: #3d9bff; --accent-fg: #06121f;
+      --ok-bg: #10301e; --ok-fg: #5ed68c; --bad-bg: #3a1414; --bad-fg: #ff9c9c;
+      --input-bg: #0d141b;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+  }
+  main { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 1.9rem; line-height: 1.2; margin: 8px 0 8px; }
+  .brand { font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); font-size: .85rem; }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  form { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  label { display: block; font-weight: 600; margin: 14px 0 6px; }
+  label:first-child { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--muted); font-size: .85rem; }
+  input, select {
+    width: 100%; padding: 10px 12px; font-size: 1rem; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--input-bg); color: var(--fg);
+  }
+  button {
+    cursor: pointer; border: 0; border-radius: 8px; padding: 12px 18px;
+    font-size: 1rem; font-weight: 700; background: var(--accent); color: var(--accent-fg);
+  }
+  button:disabled { opacity: .55; cursor: wait; }
+  button.secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 8px 14px; font-size: .9rem; }
+  #run { width: 100%; margin-top: 20px; }
+  #status { min-height: 1.5em; color: var(--muted); margin: 14px 0 0; }
+  #results { margin-top: 28px; display: none; }
+  .verdict { border-radius: 12px; padding: 20px; font-size: 1.35rem; font-weight: 800; text-align: center; }
+  .verdict.ok { background: var(--ok-bg); color: var(--ok-fg); }
+  .verdict.bad { background: var(--bad-bg); color: var(--bad-fg); }
+  .check { border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; margin-top: 10px; }
+  .check .tag { font-weight: 700; }
+  .check .tag.ok { color: var(--ok-fg); } .check .tag.bad { color: var(--bad-fg); }
+  .check p { margin: 4px 0; }
+  .panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-top: 16px; }
+  .panel h2 { margin: 0 0 10px; font-size: 1.15rem; }
+  .owed { font-size: 1.6rem; font-weight: 800; }
+  textarea {
+    width: 100%; min-height: 320px; padding: 12px; border-radius: 8px; resize: vertical;
+    border: 1px solid var(--border); background: var(--input-bg); color: var(--fg);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .85rem;
+  }
+  .row { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+  footer { color: var(--muted); font-size: .85rem; margin-top: 40px; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">DownProof</div>
+  <h1>Was your provider down? Find out what you're owed.</h1>
+  <p class="sub">DownProof runs independent uptime checks against a standard SLA — the service must be up and
+  answer within 1,000&nbsp;ms — served live by the DownProof miner. If the SLA is breached, it works out the
+  credit from the provider's own published table and drafts the claim. If the SLA is met, it says so. No fake claims.</p>
+
+  <form id="form">
+    <label for="url">Service URL</label>
+    <input id="url" type="text" inputmode="url" placeholder="https://your-service.example.com" required>
+
+    <label for="provider">Provider</label>
+    <select id="provider">
+      <option value="aws-ec2">AWS EC2</option>
+      <option value="aws-s3">AWS S3</option>
+      <option value="azure-vm">Azure Virtual Machines</option>
+      <option value="gcp-compute">Google Compute Engine</option>
+      <option value="cloudflare-workers">Cloudflare Workers</option>
+      <option value="digitalocean-spaces">DigitalOcean Spaces</option>
+      <option value="other">Other / not listed</option>
+    </select>
+
+    <label for="bill">Monthly bill in USD <span class="hint">(optional — for the amount-owed calculation)</span></label>
+    <input id="bill" type="number" min="0" step="0.01" placeholder="e.g. 1000">
+
+    <label for="uptime">Measured uptime % for the month <span class="hint">(optional — from your own monitoring; never guess it)</span></label>
+    <input id="uptime" type="number" min="0" max="100" step="0.01" placeholder="e.g. 98.5">
+
+    <label for="checks">Number of checks <span class="hint">(a proof pack — more checks are harder to dismiss)</span></label>
+    <select id="checks">
+      <option value="1">1</option>
+      <option value="2" selected>2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+
+    <button id="run" type="submit">Run the checks</button>
+    <p id="status" role="status"></p>
+  </form>
+
+  <section id="results">
+    <div id="verdict" class="verdict"></div>
+    <div id="checklist"></div>
+    <div id="owedpanel"></div>
+    <div class="panel" id="letterpanel">
+      <h2 id="lettertitle">Your claim letter</h2>
+      <textarea id="letter" readonly></textarea>
+      <div class="row">
+        <button class="secondary" id="copy" type="button">Copy</button>
+        <button class="secondary" id="download" type="button">Download (.md)</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Checks are served by the DownProof miner (<a href="/health">/health</a> ·
+    <a href="/telegraph.yaml">/telegraph.yaml</a>). Credit tiers come from each provider's own published SLA
+    page, checked 22 Nov 2026. Credits are a percentage of the affected service's monthly bill, usually
+    applied against future bills, not cash.
+  </footer>
+</main>
+<script>
+"use strict";
+
+// Provider SLA credit tiers — mirrors app/sla_credits.py TABLES exactly
+// (checked against each provider's own SLA page, 22 Nov 2026). If a
+// provider is not listed here we never guess a credit figure.
+const TABLES = {
+  "aws-ec2": {"label": "AWS EC2 (multi-AZ, region level)", "commitment": 99.99, "tiers": [[99.0, 10], [95.0, 30], [0.0, 100]], "claim_window_days": 60, "source": "https://aws.amazon.com/compute/sla/"},
+  "aws-s3": {"label": "AWS S3 (Standard)", "commitment": 99.9, "tiers": [[99.0, 10], [95.0, 25], [0.0, 100]], "claim_window_days": 60, "source": "https://aws.amazon.com/s3/sla/"},
+  "azure-vm": {"label": "Azure Virtual Machines (zones / availability sets)", "commitment": 99.99, "tiers": [[99.0, 10], [95.0, 25], [0.0, 100]], "claim_window_days": 60, "source": "https://www.syntaqx.com/books/hosting-and-cloud/slas-and-service-credits"},
+  "gcp-compute": {"label": "Google Compute Engine (multi-zone, Premium Tier)", "commitment": 99.99, "tiers": [[99.0, 10], [95.0, 25], [0.0, 100]], "claim_window_days": 30, "source": "https://cloud.google.com/compute/sla"},
+  "cloudflare-workers": {"label": "Cloudflare Workers", "commitment": 99.99, "tiers": [[99.9, 10], [95.0, 25], [0.0, 50]], "claim_window_days": null, "source": "https://www.cloudflare.com/en-gb/workers-service-level-agreement/"},
+  "digitalocean-spaces": {"label": "DigitalOcean Spaces", "commitment": 99.9, "tiers": [[99.0, 10], [95.0, 25], [0.0, 100]], "claim_window_days": null, "source": "https://www.digitalocean.com/sla/spaces"}
+};
+const CAVEAT = "Credit is a percentage of the affected service's monthly bill, usually applied as a credit against future bills, not cash. Check the provider's SLA for exclusions.";
+const PROVIDER_NAMES = {
+  "aws-ec2": "AWS EC2", "aws-s3": "AWS S3", "azure-vm": "Azure Virtual Machines",
+  "gcp-compute": "Google Compute Engine", "cloudflare-workers": "Cloudflare Workers",
+  "digitalocean-spaces": "DigitalOcean Spaces", "other": "Service provider"
+};
+const MAX_LATENCY_MS = 1000; // the standard SLA this page checks against
+
+const $ = (id) => document.getElementById(id);
+const money = (n) => "$" + n.toFixed(2);
+const round2 = (n) => Math.round(n * 100) / 100;
+
+function fmtDateUTC(d) {
+  const p = (n) => String(n).padStart(2, "0");
+  return d.getUTCFullYear() + "-" + p(d.getUTCMonth() + 1) + "-" + p(d.getUTCDate())
+    + " " + p(d.getUTCHours()) + ":" + p(d.getUTCMinutes()) + " UTC";
+}
+function ymdUTC(d) { return fmtDateUTC(d).slice(0, 10); }
+
+// Mirrors credit_for() in app/sla_credits.py.
+function creditFor(key, uptimePct, bill) {
+  const t = TABLES[key];
+  if (!t) return null;
+  let pct = 0;
+  if (uptimePct < t.commitment) {
+    for (const [lower, p] of t.tiers) { if (uptimePct >= lower) { pct = p; break; } }
+  }
+  return { label: t.label, commitment: t.commitment, uptime: uptimePct, creditPct: pct,
+           bill: round2(bill), creditUsd: round2(bill * pct / 100),
+           windowDays: t.claim_window_days, source: t.source };
+}
+
+async function runOneCheck(url) {
+  const resp = await fetch("/query", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({url: url, max_latency_ms: MAX_LATENCY_MS})
+  });
+  const data = await resp.json();
+  if (!resp.ok) throw new Error(data.error || ("HTTP " + resp.status));
+  return data;
+}
+
+$("form").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const url = $("url").value.trim();
+  const providerKey = $("provider").value;
+  const providerName = PROVIDER_NAMES[providerKey];
+  const billRaw = $("bill").value.trim();
+  const uptimeRaw = $("uptime").value.trim();
+  const bill = billRaw === "" ? null : parseFloat(billRaw);
+  const uptime = uptimeRaw === "" ? null : parseFloat(uptimeRaw);
+  const nChecks = parseInt($("checks").value, 10);
+  if (!url) return;
+  if (uptime !== null && !(uptime >= 0 && uptime <= 100)) {
+    $("status").textContent = "Uptime % must be between 0 and 100.";
+    return;
+  }
+
+  const runBtn = $("run");
+  runBtn.disabled = true;
+  $("results").style.display = "none";
+  const checkedAt = new Date();
+  const results = [];
+  try {
+    for (let i = 0; i < nChecks; i++) {
+      $("status").textContent = "Running check " + (i + 1) + " of " + nChecks + " via the DownProof miner…";
+      results.push(await runOneCheck(url));
+    }
+  } catch (e) {
+    $("status").textContent = "A check could not be completed: " + e.message;
+    runBtn.disabled = false;
+    return;
+  }
+  $("status").textContent = "";
+  runBtn.disabled = false;
+  render(url, providerKey, providerName, bill, uptime, results, checkedAt);
+});
+
+function render(url, providerKey, providerName, bill, uptime, results, checkedAt) {
+  const breachedCount = results.filter(r => r.sla && r.sla.breached).length;
+  const breached = breachedCount > 0;
+  const first = results[0];
+  const firstBreached = results.find(r => r.sla && r.sla.breached) || first;
+
+  const verdict = $("verdict");
+  verdict.className = "verdict " + (breached ? "bad" : "ok");
+  verdict.textContent = breached
+    ? "SLA BREACHED — " + breachedCount + " of " + results.length + " check(s) breached"
+    : "SLA MET — no breach found";
+
+  $("checklist").innerHTML = results.map((r, i) => {
+    const b = r.sla && r.sla.breached;
+    return '<div class="check"><p><span class="tag ' + (b ? "bad" : "ok") + '">Check ' + (i + 1)
+      + ": " + (b ? "BREACHED" : "OK") + "</span></p>"
+      + "<p>" + escapeHtml(r.summary) + "</p>"
+      + "<p>" + escapeHtml(r.sla ? r.sla.summary : "") + "</p></div>";
+  }).join("");
+
+  // Owed-money calculation — only with bill + uptime + a listed provider.
+  let owed = null;
+  let owedHtml = "";
+  if (breached && providerKey !== "other" && bill !== null && uptime !== null) {
+    owed = creditFor(providerKey, uptime, bill);
+    const deadline = owed.windowDays ? ymdUTC(new Date(checkedAt.getTime() + owed.windowDays * 86400000)) : null;
+    owed.deadline = deadline;
+    owedHtml = '<div class="panel"><h2>What you are owed</h2>'
+      + '<p class="owed">' + money(owed.creditUsd) + "</p>"
+      + "<p>Per " + escapeHtml(owed.label) + "'s own published SLA table: monthly uptime "
+      + owed.uptime + "% against a " + owed.commitment + "% commitment puts you in the "
+      + owed.creditPct + "% credit tier on a " + money(owed.bill) + " monthly bill.</p>"
+      + (deadline ? "<p><strong>Claim by " + deadline + "</strong> (last safe day, " + owed.windowDays
+        + " days from this check). Missing the window is the most common reason valid claims die.</p>" : "")
+      + '<p class="hint">Source: <a href="' + owed.source + '">' + owed.source + "</a><br>" + CAVEAT + "</p></div>";
+  } else if (breached && providerKey === "other") {
+    owedHtml = '<div class="panel"><h2>Amount owed</h2><p>The SLA was breached, but this provider is not in '
+      + "our published credit table, so the amount owed can't be calculated here — we never guess a figure. "
+      + "Check the provider's own SLA for its credit tiers, and use the claim letter below as evidence.</p></div>";
+  } else if (breached && (bill === null || uptime === null)) {
+    owedHtml = '<div class="panel"><h2>Amount owed</h2><p>The SLA was breached. To calculate the credit, '
+      + "add your monthly bill and your measured monthly uptime % above and run the checks again — "
+      + "a single snapshot cannot invent a monthly uptime figure.</p></div>";
+  } else if (!breached) {
+    owedHtml = '<div class="panel"><h2>No breach — nothing owed</h2><p>Every check came back within the SLA, '
+      + "so there is no claim to file. The honesty record below exists so a provider (and anyone reviewing "
+      + "DownProof) can see it talks users out of false claims, not just into real ones.</p></div>";
+  }
+  $("owedpanel").innerHTML = owedHtml;
+
+  // Letter / honesty record — mirrors app/downproof.py output.
+  let text, title, fname;
+  if (breached) {
+    title = "Your claim letter"; fname = "claim.md";
+    const lines = [
+      "To: " + providerName + " — Support / SLA Claims",
+      "From: A DownProof user",
+      "Date: " + fmtDateUTC(checkedAt),
+      "Subject: SLA compensation claim for " + url,
+      "",
+      "Dear " + providerName + " team,",
+      "",
+      "An independent uptime check at the time above found your service in breach of its SLA: " + (firstBreached.sla ? firstBreached.sla.summary : ""),
+      "Proof pack: " + breachedCount + " of " + results.length + " independent check(s) breached the SLA."
+    ];
+    results.forEach((r, i) => {
+      lines.push("- Check " + (i + 1) + ": " + r.summary + " | " + (r.sla ? r.sla.summary : "")
+        + " | Served by: DownProof miner (downproof-uptime), POST /query");
+    });
+    if (owed) {
+      lines.push("",
+        "Amount owed (per your own published SLA table — " + owed.label + "):",
+        "- Monthly uptime: " + owed.uptime + "% (commitment " + owed.commitment + "%)",
+        "- Credit tier: " + owed.creditPct + "% of the affected service's monthly bill",
+        "- Monthly bill supplied: " + money(owed.bill) + " -> credit owed: " + money(owed.creditUsd),
+        "- Source: " + owed.source,
+        "- " + CAVEAT);
+      if (owed.deadline) {
+        lines.push("",
+          "Claim window: file by " + owed.deadline + " (last safe day, " + owed.windowDays
+          + " days from this check). Missing the window is the most common reason valid claims die.");
+      }
+    } else if (providerKey === "other") {
+      lines.push("", "Amount owed: not calculated — the provider/service is not in our published credit table; check its SLA directly.");
+    }
+    lines.push("",
+      "Cost of proof: " + results.length + " check(s) served by the DownProof miner (downproof-uptime) from downproof.vercel.app. No charge was made from this web page; the miner's listed price on Telegraph is 0.01 USDC per check.",
+      "Recovered / owed: " + money(owed ? owed.creditUsd : 0) + ".",
+      "",
+      "Please credit the account per the SLA compensation terms and confirm in writing.",
+      "",
+      "— Generated automatically by DownProof");
+    text = lines.join("\n");
+  } else {
+    title = "Honesty record — no claim filed"; fname = "no_breach.md";
+    text = [
+      "SLA met — no claim filed",
+      "Service: " + url + " (" + providerName + ")",
+      "Checked: " + fmtDateUTC(checkedAt) + " — " + results.length + " check(s), all within the SLA",
+      "Evidence: " + first.summary,
+      "Cost of proof: " + results.length + " check(s) served by the DownProof miner (downproof-uptime) from downproof.vercel.app at no charge from this web page.",
+      "This record exists so a provider (and a judge) can see DownProof talks users out of false claims, not just into real ones."
+    ].join("\n");
+  }
+  $("lettertitle").textContent = title;
+  $("letter").value = text;
+  $("letterpanel").dataset.fname = fname;
+  $("results").style.display = "block";
+  $("results").scrollIntoView({behavior: "smooth"});
+}
+
+function escapeHtml(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => (
+    {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+}
+
+$("copy").addEventListener("click", async () => {
+  const ta = $("letter");
+  try { await navigator.clipboard.writeText(ta.value); $("copy").textContent = "Copied ✓"; }
+  catch (e) { ta.select(); document.execCommand("copy"); $("copy").textContent = "Copied ✓"; }
+  setTimeout(() => { $("copy").textContent = "Copy"; }, 2000);
+});
+$("download").addEventListener("click", () => {
+  const fname = $("letterpanel").dataset.fname || "claim.md";
+  const blob = new Blob([$("letter").value], {type: "text/markdown"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = fname;
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+</script>
+</body>
+</html>
