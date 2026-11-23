@@ -35,8 +35,10 @@ def ask_telegraph(intent: str, payload: dict) -> dict:
         return {"mode": "LIVE", "intent": intent, "answer": data.get("answer", data),
                 "receipt": data.get("receipt") or data.get("transaction") or "see engine response",
                 "cost_usdc": data.get("cost_usdc", PRICE_USDC)}
-    # Local demo fallback
-    if intent in ("SERVER_UPTIME_MONITOR", "SLA_COMPLIANCE"):
+    # Local demo fallback — accepts the canonical _GENERAL intents
+    # (what registration and the engine use) as well as the bare prefixes.
+    if intent in ("SERVER_UPTIME_MONITOR", "SERVER_UPTIME_MONITOR_GENERAL",
+                  "SLA_COMPLIANCE", "SLA_COMPLIANCE_GENERAL"):
         result = check_url(payload["url"], timeout_s=float(payload.get("timeout_s", 5)))
         answer = result.to_dict()
         answer["sla"] = sla_verdict(result, max_latency_ms=int(payload.get("max_latency_ms", 1000)))
