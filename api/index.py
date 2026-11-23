@@ -25,7 +25,7 @@ for _p in (_ROOT, _MINER):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-from monitor import check_url, sla_verdict  # noqa: E402  (miner/monitor.py)
+from monitor import check_url, sla_verdict, sla_compliance_fields  # noqa: E402  (miner/monitor.py)
 import server as _miner_server  # noqa: E402  (miner/server.py, for the YAML)
 
 YAML = _miner_server.YAML
@@ -89,12 +89,18 @@ def app(environ, start_response):
             payload = json.loads(raw or b"{}")
         except Exception:
             return _respond(start_response, 400, {"error": "invalid JSON body"})
-        url = payload.get("url", "")
+        url = payload.get("url") or payload.get("service") or ""
         if not url:
             return _respond(start_response, 400, {"error": "missing 'url'"})
         result = check_url(url, timeout_s=float(payload.get("timeout_s", 5)))
         out = result.to_dict()
         out["sla"] = sla_verdict(result, max_latency_ms=int(payload.get("max_latency_ms", 1000)))
+        target = payload.get("sla_target_pct")
+        try:
+            target = float(target) if target is not None else None
+        except (TypeError, ValueError):
+            target = None
+        out.update(sla_compliance_fields(result, out["sla"], sla_target_pct=target))
         return _respond(start_response, 200, out)
 
     return _respond(start_response, 404, {"error": "not found"})
