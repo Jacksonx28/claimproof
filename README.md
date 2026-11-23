@@ -34,6 +34,11 @@ vercel.com/new — no build settings needed, root directory = repo root.
 `vercel.json` routes every path to `api/index.py`, a stdlib WSGI adapter that
 serves the same `/query`, `/health` and `/telegraph.yaml` as `miner/server.py`.
 Your deployment URL (e.g. `https://<project>.vercel.app`) is the miner's public URL.
+The root of that URL also serves a one-page web UI (`web/index.html`, via
+`api/index.py`): a visitor enters a service URL and provider, the page runs live
+checks against the miner's `/query`, shows the verdict, calculates any credit
+owed from the provider's published SLA tiers, and drafts the claim letter —
+the same flow as the CLI, in a browser.
 
 **Render (alternative):** `render.yaml` in the repo root defines the
 `downproof-miner` service running `miner/server.py` directly.
