@@ -1,0 +1,38 @@
+# Watchlist nightly recheck.
+#
+# Honest scope: this workflow checks the watchlist against the PUBLIC
+# DownProof miner directly (POST https://downproof.vercel.app/query),
+# which is free. It does NOT make paid Telegraph engine purchases, and
+# its results are never presented as purchases. Paid engine purchases
+# are recorded separately in receipts.json and shown on /receipts.
+name: Watchlist nightly recheck (public miner, free, not the paid engine)
+
+on:
+  schedule:
+    - cron: "30 2 * * *" # 02:30 UTC nightly
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Recheck every watchlist service against the public miner
+        run: python3 tools/watch_check.py
+
+      - name: Commit and push results if anything changed
+        run: |
+          git config user.name "downproof-watch"
+          git config user.email "watch@downproof.vercel.app"
+          git add watch_results.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Nightly watchlist recheck results"
+            git push
+          fi
