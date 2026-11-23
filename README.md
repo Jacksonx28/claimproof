@@ -27,6 +27,33 @@ curl -X POST localhost:8080/query -H 'Content-Type: application/json' \
 python3 -m unittest discover -s tests
 ```
 
+## Web pages
+The deployment serves more than the one-page checker: `/` (Check),
+`/providers` (the published SLA credit tables DownProof calculates from),
+`/guide` (how to file a claim, per provider), `/receipts` (the public
+proof ledger of paid engine purchases, from `receipts.json`), and
+`/watch` (the nightly watchlist, from `watchlist.json`). A JSON version
+of the full flow is at `POST /api/check` with body
+`{url, provider, bill, uptime, checks}`, returning
+`{ok, verdict, checks, owed, letter, honesty_record}`.
+
+The watchlist is rechecked nightly by `.github/workflows/watch.yml`,
+which runs `tools/watch_check.py` against the public miner directly
+(free, not the paid engine) and commits results to `watch_results.json`.
+
+## MCP server
+`tools/mcp_server.py` is a minimal stdlib MCP server over stdio
+(JSON-RPC) exposing one tool, `downproof_check`, which calls
+`POST /api/check` on the deployed app and returns its JSON. The base
+URL defaults to `https://downproof.vercel.app` and can be overridden
+with the `DOWNPROOF_BASE_URL` environment variable.
+
+```bash
+python3 tools/mcp_server.py
+# MCP client config (stdio):
+# { "command": "python3", "args": ["tools/mcp_server.py"] }
+```
+
 ## Deploy the miner (public HTTPS URL)
 
 **Vercel (primary, free Hobby tier, no card):** import this GitHub repo at
