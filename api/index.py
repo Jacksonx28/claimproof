@@ -30,6 +30,21 @@ import server as _miner_server  # noqa: E402  (miner/server.py, for the YAML)
 
 YAML = _miner_server.YAML
 
+_WEB_INDEX = os.path.join(_ROOT, "web", "index.html")
+_web_html: str | None = None
+
+
+def _index_html() -> str | None:
+    """The DownProof web UI (web/index.html), read once and cached."""
+    global _web_html
+    if _web_html is None:
+        try:
+            with open(_WEB_INDEX, encoding="utf-8") as f:
+                _web_html = f.read()
+        except OSError:
+            return None
+    return _web_html
+
 _STATUS = {200: "200 OK", 400: "400 Bad Request", 404: "404 Not Found"}
 
 
@@ -47,6 +62,11 @@ def app(environ, start_response):
     path = environ.get("PATH_INFO", "/")
 
     if method == "GET":
+        if path in ("/", "/index.html"):
+            html = _index_html()
+            if html is not None:
+                return _respond(start_response, 200, html, "text/html; charset=utf-8")
+            return _respond(start_response, 404, {"error": "not found"})
         if path == "/health":
             return _respond(start_response, 200, {
                 "ok": True,
