@@ -10,6 +10,7 @@ GET  /telegraph.yaml  (the config you pin when registering on Telegraph)
 Plus the product surface around the miner:
 
 GET  /, /providers, /guide, /receipts, /watch   (web/*.html pages)
+GET  /og.png                                    (web/og.png share image)
 GET  /receipts.json, /watchlist.json            (repo-root JSON files)
 POST /api/check       JSON in/out version of the full DownProof flow:
                       {url, provider, bill, uptime, checks} ->
@@ -55,6 +56,7 @@ _JSON_FILES = {
     "/watchlist.json": "watchlist.json",
 }
 _web_cache: dict[str, str | None] = {}
+_web_bytes_cache: dict[str, bytes | None] = {}
 
 
 def _web_html(filename: str) -> str | None:
@@ -66,6 +68,17 @@ def _web_html(filename: str) -> str | None:
         except OSError:
             _web_cache[filename] = None
     return _web_cache[filename]
+
+
+def _web_bytes(filename: str) -> bytes | None:
+    """A binary web/* asset (the share image), read once and cached."""
+    if filename not in _web_bytes_cache:
+        try:
+            with open(os.path.join(_ROOT, "web", filename), "rb") as f:
+                _web_bytes_cache[filename] = f.read()
+        except OSError:
+            _web_bytes_cache[filename] = None
+    return _web_bytes_cache[filename]
 
 
 def _root_file(filename: str) -> str | None:
@@ -80,7 +93,12 @@ _STATUS = {200: "200 OK", 400: "400 Bad Request", 404: "404 Not Found"}
 
 
 def _respond(start_response, code: int, body, ctype: str = "application/json"):
-    data = body.encode() if isinstance(body, str) else json.dumps(body).encode()
+    if isinstance(body, bytes):
+        data = body
+    elif isinstance(body, str):
+        data = body.encode()
+    else:
+        data = json.dumps(body).encode()
     start_response(_STATUS[code], [
         ("Content-Type", ctype),
         ("Content-Length", str(len(data))),
@@ -247,6 +265,11 @@ def app(environ, start_response):
             html = _web_html(_PAGES[path])
             if html is not None:
                 return _respond(start_response, 200, html, "text/html; charset=utf-8")
+            return _respond(start_response, 404, {"error": "not found"})
+        if path == "/og.png":
+            png = _web_bytes("og.png")
+            if png is not None:
+                return _respond(start_response, 200, png, "image/png")
             return _respond(start_response, 404, {"error": "not found"})
         if path in _JSON_FILES:
             body = _root_file(_JSON_FILES[path])
