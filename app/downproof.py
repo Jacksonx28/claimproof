@@ -51,7 +51,7 @@ def build_claim(url: str, provider: str, max_latency_ms: int, customer: str = "A
     for i in range(max(1, checks)):
         if i:
             time.sleep(check_interval_secs)
-        uptime = ask_telegraph("SERVER_UPTIME_MONITOR", {"url": url, "max_latency_ms": max_latency_ms})
+        uptime = ask_telegraph("SERVER_UPTIME_MONITOR_GENERAL", {"url": url, "max_latency_ms": max_latency_ms})
         answers.append(uptime)
         total_cost += uptime["cost_usdc"]
     first = answers[0]
