@@ -62,3 +62,35 @@ def sla_verdict(result: UptimeResult, max_latency_ms: int = 1000, require_up: bo
         "reasons": reasons,
         "summary": ("SLA BREACHED: " + "; ".join(reasons)) if breached else "SLA MET: service within agreed limits",
     }
+
+
+def sla_compliance_fields(result: UptimeResult, verdict: dict, sla_target_pct: float | None = None) -> dict:
+    """The SLA_COMPLIANCE_GENERAL intent's published response fields.
+
+    Source: GET https://devnode.telegraphprotocol.com/engine/v1/intents/SLA_COMPLIANCE_GENERAL
+    (response.fields, format_version 4, served_by SLA_COMPLIANCE, read 2026-11-23):
+    service (string), uptime_pct (number, percent 0-100, scored), sla_target_pct
+    (number, percent), compliant (bool), period (string).
+
+    DownProof measures one live check at request time, so the honest values are:
+    uptime_pct is the single-sample availability (100.0 up, 0.0 down) and period
+    says so. sla_target_pct is only present when the caller supplied a target —
+    we never invent a contractual target. compliant is the sla_verdict outcome,
+    additionally requiring uptime_pct >= sla_target_pct when a target was given.
+    (SERVER_UPTIME_MONITOR_GENERAL publishes no response format at all —
+    its intent record has request=null and response=null — so nothing to add
+    for that intent beyond the existing UptimeResult fields.)
+    """
+    uptime_pct = 100.0 if result.is_up else 0.0
+    compliant = not verdict["breached"]
+    if sla_target_pct is not None:
+        compliant = compliant and uptime_pct >= sla_target_pct
+    fields = {
+        "service": result.url,
+        "period": "instant (single live check)",
+        "uptime_pct": uptime_pct,
+        "compliant": compliant,
+    }
+    if sla_target_pct is not None:
+        fields["sla_target_pct"] = sla_target_pct
+    return fields
