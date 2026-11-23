@@ -274,7 +274,7 @@
     font-family: var(--mono); font-size: .72rem; font-weight: 600;
     letter-spacing: .1em; text-transform: uppercase; color: var(--ink);
   }
-  .hint { display: block; margin-top: 3px; font-family: var(--body); font-size: .8rem; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--muted); }
+  .hint { display: block; margin: 8px 0 0; font-family: var(--body); font-size: .8rem; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--muted); }
   input, select {
     width: 100%; padding: 12px 14px; font-size: 1rem; font-family: var(--body);
     border-radius: 10px; border: 1px solid var(--border);
@@ -466,7 +466,6 @@
     background: none; border: 0; padding: 0; margin: 0; cursor: pointer;
     font-family: inherit; font-size: .82rem;
   }
-  .foot-fine { font-size: 11px; line-height: 1.6; margin: 14px 0 0; max-width: 720px; }
 
   /* Info modals (footer): Canopy style, dim blurred backdrop, quiet panel. */
   .modal-backdrop {
@@ -622,7 +621,7 @@
           </select>
         </div>
         <div class="field">
-          <label for="checks">Number of checks <span class="hint">A proof pack: more checks are harder to dismiss</span></label>
+          <label for="checks">Number of checks</label>
           <select id="checks">
             <option value="1">1</option>
             <option value="2" selected>2</option>
@@ -630,14 +629,17 @@
             <option value="4">4</option>
             <option value="5">5</option>
           </select>
+          <p class="hint">A proof pack: more checks are harder to dismiss</p>
         </div>
         <div class="field">
-          <label for="bill">Monthly bill in USD <span class="hint">Optional, for the amount-owed calculation</span></label>
+          <label for="bill">Monthly bill in USD</label>
           <input id="bill" type="number" min="0" step="0.01" placeholder="e.g. 1000">
+          <p class="hint">Optional, for the amount-owed calculation</p>
         </div>
         <div class="field">
-          <label for="uptime">Measured uptime % for the month <span class="hint">Optional, from your own monitoring; never guess it</span></label>
+          <label for="uptime">Measured uptime % for the month</label>
           <input id="uptime" type="number" min="0" max="100" step="0.01" placeholder="e.g. 98.5">
+          <p class="hint">Optional, from your own monitoring; never guess it</p>
         </div>
       </div>
       <button id="run" type="submit">Run the checks</button>
@@ -722,7 +724,6 @@
         <a href="https://github.com/Jacksonx28/downproof" target="_blank" rel="noopener">GitHub</a>
       </nav>
     </div>
-    <p class="foot-fine">Credit tiers come from each provider&rsquo;s own published SLA page, checked 22 Nov 2026. Credits are a percentage of the affected service&rsquo;s monthly bill, usually applied against future bills, not cash.</p>
   </footer>
 </main>
 
