@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DownProof — Logo options</title>
+<meta name="description" content="Four logo concepts for DownProof, shown on light and dark.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBFBF9; --surface: #FFFFFF; --ink: #101418; --muted: #5C6670;
+    --border: #E6E4DE; --accent: #FF4D00;
+    --dark-chip: #0B0C0E; --dark-border: #26282D;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Inter", -apple-system, sans-serif; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 960px; margin: 0 auto; padding: 56px 24px 72px; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace; font-size: .75rem; font-weight: 500;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px;
+  }
+  h1 { font-family: "Space Grotesk", sans-serif; font-size: 2.2rem; margin: 0 0 10px; letter-spacing: -0.01em; }
+  .intro { color: var(--muted); max-width: 620px; margin: 0 0 40px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 26px; box-shadow: 0 1px 2px rgba(16,20,24,.05), 0 8px 24px rgba(16,20,24,.05);
+  }
+  .card h2 { font-family: "Space Grotesk", sans-serif; font-size: 1.25rem; margin: 20px 0 4px; }
+  .card .num { font-family: "IBM Plex Mono", monospace; font-size: .75rem; color: var(--accent); font-weight: 500; letter-spacing: .1em; }
+  .card p { color: var(--muted); margin: 0; font-size: .95rem; }
+  .chips { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .chip {
+    border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    padding: 28px 12px; border: 1px solid var(--border); background: #FFFFFF;
+  }
+  .chip.dark { background: var(--dark-chip); border-color: var(--dark-border); }
+  .chip svg { display: block; }
+  .lockup { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
+  .lockup .word { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 1.3rem; }
+  .sizes { display: flex; align-items: flex-end; gap: 14px; margin-top: 16px; color: var(--muted); }
+  .sizes span { font-family: "IBM Plex Mono", monospace; font-size: .68rem; display: block; text-align: center; margin-top: 4px; }
+  footer { color: var(--muted); font-size: .88rem; margin-top: 44px; border-top: 1px solid var(--border); padding-top: 22px; }
+  @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">DownProof · Brand</p>
+  <h1>Logo options</h1>
+  <p class="intro">Four concepts in the Telegraph-ecosystem palette — signal orange <strong>#FF4D00</strong> on ink.
+  Each is geometric, drawn on a 64-unit grid, and stays legible at favicon size (16px samples under each card). Pick a number.</p>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="chips">
+        <div class="chip" style="color:#101418">
+          <svg width="96" height="96" viewBox="0 0 64 64" fill="none" aria-label="Pulse Shield on light">
+            <path d="M32 3 55 11.5V29c0 15.5-9.4 26.4-23 32C18.4 55.4 9 44.5 9 29V11.5L32 3Z" stroke="#FF4D00" stroke-width="4" stroke-linejoin="round"/>
+            <polyline points="17,33 25,33 29.5,23 35.5,43 39.5,33 47,33" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="chip dark" style="color:#F2F3F0">
+          <svg width="96" height="96" viewBox="0 0 64 64" fill="none" aria-label="Pulse Shield on dark">
+            <path d="M32 3 55 11.5V29c0 15.5-9.4 26.4-23 32C18.4 55.4 9 44.5 9 29V11.5L32 3Z" stroke="#FF4D00" stroke-width="4" stroke-linejoin="round"/>
+            <polyline points="17,33 25,33 29.5,23 35.5,43 39.5,33 47,33" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="lockup" style="color:#101418">
+        <svg width="34" height="34" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <path d="M32 3 55 11.5V29c0 15.5-9.4 26.4-23 32C18.4 55.4 9 44.5 9 29V11.5L32 3Z" stroke="#FF4D00" stroke-width="4.5" stroke-linejoin="round"/>
+          <polyline points="17,33 25,33 29.5,23 35.5,43 39.5,33 47,33" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="word">DownProof</span>
+      </div>
+      <h2><span class="num">01</span>&nbsp; Pulse Shield</h2>
+      <p>A shield — the proof that protects your claim — crossed by a pulse line that dips down: the outage, caught on the record. Trust + monitoring in one mark. <em>(Currently in the site nav.)</em></p>
+      <div class="sizes" style="color:#101418">
+        <div><svg width="32" height="32" viewBox="0 0 64 64" fill="none"><path d="M32 3 55 11.5V29c0 15.5-9.4 26.4-23 32C18.4 55.4 9 44.5 9 29V11.5L32 3Z" stroke="#FF4D00" stroke-width="5" stroke-linejoin="round"/><polyline points="17,33 25,33 29.5,23 35.5,43 39.5,33 47,33" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>32px</span></div>
+        <div><svg width="16" height="16" viewBox="0 0 64 64" fill="none"><path d="M32 3 55 11.5V29c0 15.5-9.4 26.4-23 32C18.4 55.4 9 44.5 9 29V11.5L32 3Z" stroke="#FF4D00" stroke-width="6" stroke-linejoin="round"/><polyline points="17,33 25,33 29.5,23 35.5,43 39.5,33 47,33" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>16px</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="chips">
+        <div class="chip" style="color:#101418">
+          <svg width="96" height="96" viewBox="0 0 64 64" fill="none" aria-label="Stamp Down on light">
+            <rect x="7" y="7" width="50" height="50" rx="13" stroke="#FF4D00" stroke-width="4"/>
+            <polyline points="20,17 27.5,25.5 42,11" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="19,36 32,50 45,36" stroke="#FF4D00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="chip dark" style="color:#F2F3F0">
+          <svg width="96" height="96" viewBox="0 0 64 64" fill="none" aria-label="Stamp Down on dark">
+            <rect x="7" y="7" width="50" height="50" rx="13" stroke="#FF4D00" stroke-width="4"/>
+            <polyline points="20,17 27.5,25.5 42,11" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="19,36 32,50 45,36" stroke="#FF4D00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="lockup" style="color:#101418">
+        <svg width="34" height="34" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="7" y="7" width="50" height="50" rx="13" stroke="#FF4D00" stroke-width="4.5"/>
+          <polyline points="20,17 27.5,25.5 42,11" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline points="19,36 32,50 45,36" stroke="#FF4D00" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="word">DownProof</span>
+      </div>
+      <h2><span class="num">02</span>&nbsp; Stamp Down</h2>
+      <p>A rounded-square seal — a claim, stamped and proven. Inside, a bold tick sits over a downward chevron: verified, and it went <em>down</em>. The most &ldquo;official document&rdquo; of the four.</p>
+      <div class="sizes" style="color:#101418">
+        <div><svg width="32" height="32" viewBox="0 0 64 64" fill="none"><rect x="7" y="7" width="50" height="50" rx="13" stroke="#FF4D00" stroke-width="5"/><polyline points="20,17 27.5,25.5 42,11" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><polyline points="19,36 32,50 45,36" stroke="#FF4D00" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>32px</span></div>
+        <div><svg width="16" height="16" viewBox="0 0 64 64" fill="none"><rect x="7" y="7" width="50" height="50" rx="13" stroke="#FF4D00" stroke-width="6"/><polyline points="20,17 27.5,25.5 42,11" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><polyline points="19,36 32,50 45,36" stroke="#FF4D00" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>16px</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="chips">
+        <div class="chip" style="color:#101418">
+          <svg width="96" height="96" viewBox="0 0 64 64" fill="none" aria-label="Signal D on light">
+            <rect x="10" y="8" width="8" height="48" rx="4" fill="#FF4D00"/>
+            <rect x="22" y="8" width="8" height="45" rx="4" fill="currentColor"/>
+            <rect x="34" y="8" width="8" height="37" rx="4" fill="currentColor"/>
+            <rect x="46" y="8" width="8" height="25" rx="4" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="chip dark" style="color:#F2F3F0">
+          <svg width="96" height="96" viewBox="0 0 64 64" fill="none" aria-label="Signal D on dark">
+            <rect x="10" y="8" width="8" height="48" rx="4" fill="#FF4D00"/>
+            <rect x="22" y="8" width="8" height="45" rx="4" fill="currentColor"/>
+            <rect x="34" y="8" width="8" height="37" rx="4" fill="currentColor"/>
+            <rect x="46" y="8" width="8" height="25" rx="4" fill="currentColor"/>
+          </svg>
+        </div>
+      </div>
+      <div class="lockup" style="color:#101418">
+        <svg width="34" height="34" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="10" y="8" width="8" height="48" rx="4" fill="#FF4D00"/>
+          <rect x="22" y="8" width="8" height="45" rx="4" fill="currentColor"/>
+          <rect x="34" y="8" width="8" height="37" rx="4" fill="currentColor"/>
+          <rect x="46" y="8" width="8" height="25" rx="4" fill="currentColor"/>
+        </svg>
+        <span class="word">DownProof</span>
+      </div>
+      <h2><span class="num">03</span>&nbsp; Signal D</h2>
+      <p>The letter D built from signal bars of descending height — the signal going down, measured bar by bar. The most abstract and tech-native of the set; pairs naturally with the miner/network story.</p>
+      <div class="sizes" style="color:#101418">
+        <div><svg width="32" height="32" viewBox="0 0 64 64" fill="none"><rect x="10" y="8" width="8" height="48" rx="4" fill="#FF4D00"/><rect x="22" y="8" width="8" height="45" rx="4" fill="currentColor"/><rect x="34" y="8" width="8" height="37" rx="4" fill="currentColor"/><rect x="46" y="8" width="8" height="25" rx="4" fill="currentColor"/></svg><span>32px</span></div>
+        <div><svg width="16" height="16" viewBox="0 0 64 64" fill="none"><rect x="10" y="8" width="8" height="48" rx="4" fill="#FF4D00"/><rect x="22" y="8" width="8" height="45" rx="4" fill="currentColor"/><rect x="34" y="8" width="8" height="37" rx="4" fill="currentColor"/><rect x="46" y="8" width="8" height="25" rx="4" fill="currentColor"/></svg><span>16px</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="chips">
+        <div class="chip" style="color:#101418">
+          <svg width="96" height="96" viewBox="0 0 64 64" fill="none" aria-label="Receipt on light">
+            <path d="M17 5h30v54l-5-4.2L37 59l-5-4.2L27 59l-5-4.2L17 59V5Z" stroke="#FF4D00" stroke-width="4" stroke-linejoin="round"/>
+            <polyline points="23.5,31 29.5,37.5 41,25" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="chip dark" style="color:#F2F3F0">
+          <svg width="96" height="96" viewBox="0 0 64 64" fill="none" aria-label="Receipt on dark">
+            <path d="M17 5h30v54l-5-4.2L37 59l-5-4.2L27 59l-5-4.2L17 59V5Z" stroke="#FF4D00" stroke-width="4" stroke-linejoin="round"/>
+            <polyline points="23.5,31 29.5,37.5 41,25" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="lockup" style="color:#101418">
+        <svg width="34" height="34" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <path d="M17 5h30v54l-5-4.2L37 59l-5-4.2L27 59l-5-4.2L17 59V5Z" stroke="#FF4D00" stroke-width="4.5" stroke-linejoin="round"/>
+          <polyline points="23.5,31 29.5,37.5 41,25" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="word">DownProof</span>
+      </div>
+      <h2><span class="num">04</span>&nbsp; Receipt</h2>
+      <p>A receipt with a zigzag tear edge and a bold check inside — the Telegraph receipt and the claim letter in one mark. The most literal: proof you can hold.</p>
+      <div class="sizes" style="color:#101418">
+        <div><svg width="32" height="32" viewBox="0 0 64 64" fill="none"><path d="M17 5h30v54l-5-4.2L37 59l-5-4.2L27 59l-5-4.2L17 59V5Z" stroke="#FF4D00" stroke-width="5" stroke-linejoin="round"/><polyline points="23.5,31 29.5,37.5 41,25" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>32px</span></div>
+        <div><svg width="16" height="16" viewBox="0 0 64 64" fill="none"><path d="M17 5h30v54l-5-4.2L37 59l-5-4.2L27 59l-5-4.2L17 59V5Z" stroke="#FF4D00" stroke-width="6" stroke-linejoin="round"/><polyline points="23.5,31 29.5,37.5 41,25" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>16px</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    All four marks: signal orange #FF4D00 + ink (#101418 on light, #F2F3F0 on dark), drawn on a 64-unit grid with
+    stroke weights that survive 16px. Concept 1 (Pulse Shield) is the placeholder in the redesigned site nav —
+    say the word and the nav mark, favicon and wordmark swap to your pick.
+  </footer>
+</main>
+</body>
+</html>
