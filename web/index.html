@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DownProof — Was your provider down? Find out what you're owed.</title>
+<title>DownProof: Was your provider down? Find out what you're owed.</title>
 <meta name="description" content="DownProof runs independent uptime checks against your provider's SLA and drafts the compensation claim when the SLA is breached.">
-<meta name="theme-color" content="#FBFBF9">
+<meta name="theme-color" content="#FAFAF8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script>
   // Set the theme before first paint: saved choice, else OS preference.
   (function () {
@@ -22,154 +22,154 @@
 </script>
 <style>
   :root {
-    --bg: #FBFBF9;
+    --bg: #FAFAF8;
     --surface: #FFFFFF;
-    --surface-2: #F4F3EF;
-    --ink: #101418;
-    --muted: #5C6670;
-    --border: #E6E4DE;
+    --surface-2: #F4F2EF;
+    --ink: #171310;
+    --muted: #716B64;
+    --border: #E7E4DF;
     --accent: #FF4D00;
     --accent-hover: #E64400;
     --accent-ink: #FFFFFF;
-    --accent-soft: #FFF0E8;
+    --accent-soft: #FFF1E9;
     --amber: #FF9E00;
     --ok: #0E9F5A;
-    --ok-bg: #E7F6EE;
-    --ok-border: #BEE8D2;
+    --ok-bg: #E9F7EF;
+    --ok-border: #C4E9D4;
     --bad: #E5484D;
     --bad-bg: #FDECEC;
     --bad-border: #F6CACA;
-    --glass: rgba(255, 255, 255, .62);
-    --glass-strong: rgba(255, 255, 255, .8);
-    --glass-edge: rgba(255, 255, 255, .65);
-    --glass-shadow: 0 1px 2px rgba(16,20,24,.05), 0 24px 48px -12px rgba(16,20,24,.14);
-    --shadow: 0 1px 2px rgba(16,20,24,.05), 0 12px 32px rgba(16,20,24,.07);
-    --shadow-sm: 0 1px 2px rgba(16,20,24,.05), 0 4px 12px rgba(16,20,24,.05);
-    --display: "Space Grotesk", "Inter", sans-serif;
-    --body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --glass: rgba(255, 255, 255, .74);
+    --glass-strong: rgba(255, 255, 255, .88);
+    --glass-edge: #E7E4DF;
+    --glass-shadow: 0 10px 34px rgba(23, 19, 16, .07);
+    --shadow: 0 5px 24px rgba(23, 19, 16, .05);
+    --shadow-sm: 0 2px 10px rgba(23, 19, 16, .04);
+    --display: "Space Grotesk", "DM Sans", sans-serif;
+    --body: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
   [data-theme="dark"] {
-    --bg: #0B0C0E;
-    --surface: #141619;
-    --surface-2: #1A1C20;
-    --ink: #F2F3F0;
-    --muted: #9BA3AB;
-    --border: #26282D;
-    --accent: #FF4D00;
-    --accent-hover: #E64400;
-    --accent-ink: #FFFFFF;
-    --accent-soft: #2B160B;
-    --amber: #FFB03A;
-    --ok: #2FBF71;
-    --ok-bg: #0D2A1C;
-    --ok-border: #1D4A33;
-    --bad: #FF6369;
-    --bad-bg: #331417;
+    --bg: #0A0908;
+    --surface: #141210;
+    --surface-2: #1E1B18;
+    --ink: #F5F1EC;
+    --muted: #A8A29A;
+    --border: #2A2622;
+    --accent: #FF7A29;
+    --accent-hover: #FF8C42;
+    --accent-ink: #221103;
+    --accent-soft: #2A1A0E;
+    --amber: #FFB35C;
+    --ok: #3ECF74;
+    --ok-bg: #0E2A1A;
+    --ok-border: #1E4A30;
+    --bad: #FF6B70;
+    --bad-bg: #331416;
     --bad-border: #5A2327;
-    --glass: rgba(22, 24, 28, .55);
-    --glass-strong: rgba(22, 24, 28, .74);
-    --glass-edge: rgba(255, 255, 255, .09);
-    --glass-shadow: 0 1px 2px rgba(0,0,0,.45), 0 24px 48px -12px rgba(0,0,0,.55);
-    --shadow: 0 1px 2px rgba(0,0,0,.45), 0 12px 32px rgba(0,0,0,.4);
-    --shadow-sm: 0 1px 2px rgba(0,0,0,.4), 0 4px 12px rgba(0,0,0,.3);
+    --glass: rgba(20, 18, 16, .72);
+    --glass-strong: rgba(22, 20, 17, .88);
+    --glass-edge: #2A2622;
+    --glass-shadow: 0 12px 38px rgba(0, 0, 0, .45);
+    --shadow: 0 5px 24px rgba(0, 0, 0, .35);
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, .3);
   }
   /* Near-opaque fallback where backdrop-filter is unavailable. */
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    :root { --glass: rgba(255,255,255,.95); --glass-strong: #FFFFFF; }
-    [data-theme="dark"] { --glass: rgba(20,22,25,.96); --glass-strong: #141619; }
+    :root { --glass: rgba(255,255,255,.97); --glass-strong: #FFFFFF; }
+    [data-theme="dark"] { --glass: rgba(20,18,16,.97); --glass-strong: #141210; }
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
     margin: 0; background: var(--bg); color: var(--ink);
     font-family: var(--body); line-height: 1.55; font-size: 16px;
-    -webkit-font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
     transition: background-color .25s ease, color .25s ease;
   }
   ::selection { background: var(--accent); color: var(--accent-ink); }
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
-  h1, h2, h3 { font-family: var(--display); letter-spacing: -0.01em; }
+  h1, h2, h3 { font-family: var(--display); letter-spacing: -0.03em; }
 
-  /* ---------- Aurora background ---------- */
+  /* Aurora background: a faint warm wash, kept quiet on purpose. */
   .bg-fx { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-  .bg-fx .blob { position: absolute; border-radius: 50%; filter: blur(70px); will-change: transform, opacity; }
+  .bg-fx .blob { position: absolute; border-radius: 50%; filter: blur(80px); will-change: transform, opacity; }
   .bg-fx .b1 {
-    width: 55vw; height: 55vw; min-width: 480px; min-height: 480px;
-    top: -18vw; right: -10vw;
-    background: radial-gradient(circle at 35% 35%, rgba(255,77,0,.34), rgba(255,77,0,0) 68%);
-    animation: drift1 26s ease-in-out infinite alternate;
+    width: 58vw; height: 58vw; min-width: 500px; min-height: 500px;
+    top: -24vw; right: -12vw;
+    background: radial-gradient(circle at 40% 40%, rgba(255,138,61,.16), rgba(255,138,61,0) 65%);
+    animation: drift1 30s ease-in-out infinite alternate;
   }
   .bg-fx .b2 {
-    width: 42vw; height: 42vw; min-width: 380px; min-height: 380px;
-    top: 22vh; left: -14vw;
-    background: radial-gradient(circle at 50% 50%, rgba(255,158,0,.26), rgba(255,158,0,0) 68%);
-    animation: drift2 32s ease-in-out infinite alternate;
+    width: 44vw; height: 44vw; min-width: 380px; min-height: 380px;
+    top: 30vh; left: -16vw;
+    background: radial-gradient(circle at 50% 50%, rgba(255,183,140,.13), rgba(255,183,140,0) 65%);
+    animation: drift2 36s ease-in-out infinite alternate;
   }
   .bg-fx .b3 {
     width: 48vw; height: 48vw; min-width: 420px; min-height: 420px;
-    bottom: -24vw; right: 16vw;
-    background: radial-gradient(circle at 50% 50%, rgba(255,183,140,.30), rgba(255,183,140,0) 70%);
-    animation: drift1 38s ease-in-out infinite alternate-reverse;
+    bottom: -26vw; right: 14vw;
+    background: radial-gradient(circle at 50% 50%, rgba(255,205,160,.10), rgba(255,205,160,0) 68%);
+    animation: drift1 40s ease-in-out infinite alternate-reverse;
   }
-  [data-theme="dark"] .bg-fx .b1 { background: radial-gradient(circle at 35% 35%, rgba(255,77,0,.30), rgba(255,77,0,0) 68%); }
-  [data-theme="dark"] .bg-fx .b2 { background: radial-gradient(circle at 50% 50%, rgba(255,110,0,.16), rgba(255,110,0,0) 68%); }
-  [data-theme="dark"] .bg-fx .b3 { background: radial-gradient(circle at 50% 50%, rgba(190,60,0,.20), rgba(190,60,0,0) 70%); }
+  [data-theme="dark"] .bg-fx .b1 { background: radial-gradient(circle at 40% 40%, rgba(255,96,0,.13), rgba(255,96,0,0) 65%); }
+  [data-theme="dark"] .bg-fx .b2 { background: radial-gradient(circle at 50% 50%, rgba(255,70,0,.08), rgba(255,70,0,0) 65%); }
+  [data-theme="dark"] .bg-fx .b3 { background: radial-gradient(circle at 50% 50%, rgba(150,45,0,.09), rgba(150,45,0,0) 68%); }
   @keyframes drift1 {
-    from { transform: translate3d(0,0,0) scale(1); opacity: .9; }
-    to   { transform: translate3d(-4vw, 3.5vh, 0) scale(1.12); opacity: 1; }
+    from { transform: translate3d(0,0,0) scale(1); opacity: .85; }
+    to   { transform: translate3d(-3vw, 3vh, 0) scale(1.08); opacity: 1; }
   }
   @keyframes drift2 {
-    from { transform: translate3d(0,0,0) scale(1.05); opacity: 1; }
-    to   { transform: translate3d(3.5vw, -3vh, 0) scale(.94); opacity: .85; }
+    from { transform: translate3d(0,0,0) scale(1.04); opacity: 1; }
+    to   { transform: translate3d(3vw, -2.5vh, 0) scale(.96); opacity: .8; }
   }
   .bg-fx .noise {
-    position: absolute; inset: 0; opacity: .05; mix-blend-mode: overlay;
+    position: absolute; inset: 0; opacity: .04; mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
   }
-  [data-theme="dark"] .bg-fx .noise { opacity: .07; }
+  [data-theme="dark"] .bg-fx .noise { opacity: .05; }
 
-  /* ---------- Glass ---------- */
-  .glass {
+  /* Nav: a floating glass bar, detached inside the content width. */
+  .nav { position: sticky; top: 12px; z-index: 50; margin-top: 12px; padding: 0 24px; }
+  .nav-inner {
+    max-width: 1072px; margin: 0 auto; height: 66px;
+    display: flex; align-items: center; gap: 16px;
+    padding: 0 12px 0 18px; border-radius: 16px;
     background: var(--glass);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(26px) saturate(150%);
+    backdrop-filter: blur(26px) saturate(150%);
     border: 1px solid var(--glass-edge);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.35), var(--glass-shadow);
-  }
-  [data-theme="dark"] .glass { box-shadow: inset 0 1px 0 rgba(255,255,255,.06), var(--glass-shadow); }
-
-  /* ---------- Nav ---------- */
-  .nav {
-    position: sticky; top: 0; z-index: 50;
-    background: var(--glass);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    backdrop-filter: blur(18px) saturate(160%);
-    border-bottom: 1px solid var(--glass-edge);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 8px 28px rgba(23,19,16,.05);
     transition: box-shadow .25s ease;
   }
-  .nav.scrolled { box-shadow: 0 12px 32px -12px rgba(16,20,24,.22); }
-  [data-theme="dark"] .nav.scrolled { box-shadow: 0 12px 32px -12px rgba(0,0,0,.6); }
-  .nav-inner {
-    max-width: 1120px; margin: 0 auto; padding: 0 24px;
-    height: 64px; display: flex; align-items: center; gap: 24px;
-  }
+  [data-theme="dark"] .nav-inner { box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 8px 28px rgba(0,0,0,.38); }
+  .nav.scrolled .nav-inner { box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 14px 36px rgba(23,19,16,.10); }
+  [data-theme="dark"] .nav.scrolled .nav-inner { box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 14px 36px rgba(0,0,0,.55); }
   .brand {
-    display: inline-flex; align-items: center; gap: 10px;
-    color: var(--ink); font-family: var(--display); font-weight: 700; font-size: 1.15rem;
+    display: inline-flex; align-items: center; gap: 9px;
+    color: var(--ink); font-family: var(--display); font-weight: 700;
+    font-size: 1.08rem; letter-spacing: -0.02em;
   }
   .brand:hover { text-decoration: none; }
   .brand svg { display: block; }
-  .nav-links { margin-left: auto; display: flex; align-items: center; gap: 22px; }
-  .nav-links a { color: var(--muted); font-weight: 500; font-size: .95rem; }
+  .nav-div { width: 1px; height: 22px; background: var(--border); flex: none; }
+  .nav-context { color: var(--muted); font-size: .88rem; white-space: nowrap; }
+  .nav-links { margin-left: auto; display: flex; align-items: center; gap: 20px; }
+  .nav-links a { color: var(--muted); font-weight: 500; font-size: .9rem; transition: color .16s ease; }
   .nav-links a:hover { color: var(--ink); text-decoration: none; }
-  .nav-links a.gh { color: var(--ink); font-weight: 600; }
+  .nav-links a.nav-cta {
+    background: var(--ink); color: var(--bg); font-weight: 600; font-size: .85rem;
+    border-radius: 9px; padding: 9px 14px; white-space: nowrap;
+    transition: opacity .16s ease, transform .16s ease;
+  }
+  .nav-links a.nav-cta:hover { color: var(--bg); opacity: .88; }
+  .nav-links a.nav-cta:active { transform: scale(.98); }
   .pill {
     display: inline-flex; align-items: center; gap: 8px;
-    font-family: var(--mono); font-size: .72rem; font-weight: 500; letter-spacing: .04em;
-    color: var(--ink); background: var(--glass-strong); border: 1px solid var(--glass-edge);
+    font-family: var(--mono); font-size: .7rem; font-weight: 500; letter-spacing: .04em;
+    color: var(--ink); background: var(--surface-2); border: 1px solid var(--border);
     border-radius: 999px; padding: 5px 12px; white-space: nowrap;
   }
   .dot {
@@ -183,21 +183,21 @@
   .icon-btn {
     display: inline-flex; align-items: center; justify-content: center;
     width: 38px; height: 38px; border-radius: 10px; flex: none;
-    background: var(--glass-strong); border: 1px solid var(--glass-edge); color: var(--ink);
+    background: transparent; border: 1px solid var(--border); color: var(--ink);
     cursor: pointer; padding: 0;
-    transition: transform .12s ease, border-color .15s ease;
+    transition: transform .16s ease, background-color .16s ease;
   }
-  .icon-btn:hover { border-color: var(--muted); }
+  .icon-btn:hover { background: var(--surface-2); }
   .icon-btn:active { transform: scale(.96); }
   .icon-btn svg { display: block; }
   [data-theme="light"] .icon-moon { display: none; }
   [data-theme="dark"] .icon-sun { display: none; }
 
-  /* ---------- Layout ---------- */
-  main { max-width: 1120px; margin: 0 auto; padding: 0 24px 72px; position: relative; z-index: 1; }
-  section { scroll-margin-top: 88px; }
+  /* Layout */
+  main { max-width: 1120px; margin: 0 auto; padding: 0 24px 48px; position: relative; z-index: 1; }
+  section { scroll-margin-top: 100px; }
 
-  /* ---------- Scroll reveal (armed by JS adding html.anim) ---------- */
+  /* Scroll reveal (armed by JS adding html.anim) */
   html.anim .reveal {
     opacity: 0; transform: translateY(14px);
     transition: opacity .7s ease, transform .7s cubic-bezier(.22,.61,.36,1);
@@ -205,8 +205,8 @@
   }
   html.anim .reveal.in { opacity: 1; transform: none; }
 
-  /* ---------- Hero ---------- */
-  .hero { padding: 76px 0 44px; max-width: 820px; }
+  /* Hero */
+  .hero { padding: 64px 0 40px; max-width: 820px; }
   .eyebrow {
     font-family: var(--mono); font-size: .75rem; font-weight: 600;
     letter-spacing: .14em; text-transform: uppercase; color: var(--accent);
@@ -216,11 +216,12 @@
   .badge {
     display: inline-flex; align-items: center; gap: 8px; margin: 0 0 26px;
     font-family: var(--mono); font-size: .74rem; font-weight: 500; letter-spacing: .05em;
-    color: var(--ink); border-radius: 999px; padding: 7px 14px;
+    color: var(--ink); background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 999px; padding: 7px 14px;
   }
   .hero h1 {
     font-size: clamp(2.6rem, 6.2vw, 4.3rem); line-height: 1.04; font-weight: 700;
-    margin: 0 0 22px; letter-spacing: -0.02em;
+    margin: 0 0 22px; letter-spacing: -0.035em;
   }
   .hero h1 .hl {
     background: linear-gradient(90deg, var(--accent), var(--amber), var(--accent));
@@ -236,38 +237,29 @@
   .sub { color: var(--muted); font-size: 1.14rem; line-height: 1.62; margin: 0 0 34px; max-width: 660px; }
   .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
   .btn {
-    position: relative; overflow: hidden;
     display: inline-flex; align-items: center; gap: 9px;
-    font-weight: 600; font-size: 1rem; border-radius: 999px; padding: 14px 26px;
+    font-weight: 600; font-size: .95rem; border-radius: 10px; padding: 12px 20px;
     border: 1px solid transparent; cursor: pointer;
-    transition: transform .15s ease, box-shadow .2s ease, background-color .2s ease;
+    transition: background-color .16s ease, transform .16s ease, box-shadow .16s ease;
   }
   .btn:hover { text-decoration: none; }
   .btn:active { transform: scale(.98); }
-  .btn .arr { display: inline-block; transition: transform .2s ease; }
+  .btn .arr { display: inline-block; transition: transform .16s ease; }
   .btn:hover .arr { transform: translateX(3px); }
   .btn.primary {
     background: var(--ink); color: var(--bg);
-    box-shadow: 0 14px 30px -10px rgba(16,20,24,.45);
+    box-shadow: 0 6px 20px rgba(23,19,16,.14);
   }
-  .btn.primary::after, #run::after {
-    content: ""; position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(105deg, transparent 42%, rgba(255,255,255,.38) 50%, transparent 58%);
-    transform: translateX(-130%); transition: transform .7s ease;
-  }
-  .btn.primary:hover::after, #run:hover::after { transform: translateX(130%); }
+  .btn.primary:hover { background: color-mix(in srgb, var(--ink) 88%, var(--bg)); }
   .btn.ghost {
-    color: var(--ink);
-    background: var(--glass);
-    -webkit-backdrop-filter: blur(14px) saturate(150%);
-    backdrop-filter: blur(14px) saturate(150%);
-    border-color: var(--glass-edge);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.3), var(--shadow-sm);
+    color: var(--ink); background: var(--surface);
+    border-color: var(--border); box-shadow: var(--shadow-sm);
   }
-  .btn.ghost:hover { transform: translateY(-1px); }
+  .btn.ghost:hover { background: var(--surface-2); }
   .stats {
     list-style: none; display: flex; flex-wrap: wrap; gap: 10px 0;
-    margin: 46px 0 0; padding: 20px 26px; border-radius: 16px;
+    margin: 44px 0 0; padding: 18px 24px; border-radius: 14px;
+    background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-sm);
   }
   .stats li {
     font-family: var(--mono); font-size: .78rem; color: var(--muted); letter-spacing: .02em;
@@ -275,25 +267,21 @@
   }
   .stats li:first-child { padding-left: 0; border-left: 0; }
   .stats li:last-child { padding-right: 0; }
-  .stats strong { display: block; font-family: var(--display); font-size: 1.45rem; color: var(--ink); letter-spacing: 0; margin-bottom: 2px; font-variant-numeric: tabular-nums; }
+  .stats strong {
+    display: block; font-family: var(--display); font-size: 1.45rem; color: var(--ink);
+    letter-spacing: -0.03em; margin-bottom: 2px; font-variant-numeric: tabular-nums;
+  }
 
-  /* ---------- Checker ---------- */
+  /* Checker */
   .checker-card {
-    position: relative; border-radius: 20px; padding: 34px; margin-top: 16px;
-    border: 1px solid transparent;
-    background:
-      linear-gradient(var(--glass-strong), var(--glass-strong)) padding-box,
-      linear-gradient(140deg, rgba(255,77,0,.55), rgba(255,255,255,.28) 42%, rgba(255,158,0,.38)) border-box;
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    backdrop-filter: blur(18px) saturate(160%);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.35), var(--glass-shadow);
+    border-radius: 18px; padding: 32px; margin-top: 8px;
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(26px) saturate(150%);
+    backdrop-filter: blur(26px) saturate(150%);
+    border: 1px solid var(--glass-edge);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.55), var(--shadow);
   }
-  [data-theme="dark"] .checker-card {
-    background:
-      linear-gradient(var(--glass-strong), var(--glass-strong)) padding-box,
-      linear-gradient(140deg, rgba(255,77,0,.6), rgba(255,255,255,.10) 42%, rgba(255,158,0,.35)) border-box;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.06), var(--glass-shadow);
-  }
+  [data-theme="dark"] .checker-card { box-shadow: inset 0 1px 0 rgba(255,255,255,.05), var(--shadow); }
   .checker-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
   .checker-head h2 { margin: 0; font-size: 1.5rem; }
   .checker-head p { margin: 0; color: var(--muted); font-size: .95rem; }
@@ -307,39 +295,36 @@
   .hint { display: block; margin-top: 3px; font-family: var(--body); font-size: .8rem; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--muted); }
   input, select {
     width: 100%; padding: 12px 14px; font-size: 1rem; font-family: var(--body);
-    border-radius: 12px; border: 1px solid var(--border);
-    background: color-mix(in srgb, var(--surface) 55%, transparent); color: var(--ink);
-    transition: border-color .15s ease, box-shadow .2s ease, background-color .2s ease;
+    border-radius: 10px; border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 65%, transparent); color: var(--ink);
+    transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease;
   }
   input::placeholder { color: var(--muted); opacity: .75; }
   input:focus, select:focus {
     outline: none; border-color: var(--accent);
     background: var(--surface);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent),
-                0 0 22px -4px color-mix(in srgb, var(--accent) 45%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent);
   }
   button {
     cursor: pointer; border: 0; border-radius: 10px; padding: 12px 18px;
     font-size: 1rem; font-weight: 600; font-family: var(--body);
     background: var(--accent); color: var(--accent-ink);
-    transition: transform .12s ease, background-color .15s ease, box-shadow .2s ease;
+    transition: transform .16s ease, background-color .16s ease, box-shadow .16s ease;
   }
   button:hover { background: var(--accent-hover); }
   button:active { transform: scale(.98); }
   button:disabled { opacity: .55; cursor: wait; }
   button.secondary {
-    background: var(--glass-strong); color: var(--ink); border: 1px solid var(--glass-edge);
+    background: var(--surface); color: var(--ink); border: 1px solid var(--border);
     padding: 9px 16px; font-size: .9rem;
-    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
   }
-  button.secondary:hover { background: var(--surface-2); border-color: var(--muted); }
+  button.secondary:hover { background: var(--surface-2); }
   #run {
-    position: relative; overflow: hidden;
-    width: 100%; margin-top: 26px; padding: 16px 18px; font-size: 1.05rem; border-radius: 999px;
-    background: linear-gradient(120deg, var(--accent), #FF6A00 55%, var(--amber));
-    box-shadow: 0 16px 34px -10px color-mix(in srgb, var(--accent) 55%, transparent);
+    width: 100%; margin-top: 24px; padding: 15px 18px; font-size: 1rem; border-radius: 12px;
+    background: var(--accent); color: var(--accent-ink);
+    box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--accent) 50%, transparent);
   }
-  #run:hover { background: linear-gradient(120deg, var(--accent-hover), #F25E00 55%, #FF9500); }
+  #run:hover { background: var(--accent-hover); }
   #status { min-height: 1.5em; color: var(--muted); margin: 14px 0 0; font-size: .92rem; }
   #status:not(:empty)::before { content: "› "; color: var(--accent); font-weight: 700; }
   #status:not(:empty)::after {
@@ -352,11 +337,12 @@
     50% { opacity: 1; transform: scale(1.15); }
   }
 
-  /* ---------- Results ---------- */
+  /* Results */
   #results { margin-top: 32px; display: none; }
   .verdict {
     border-radius: 16px; padding: 26px 30px; font-family: var(--display);
     font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 700; text-align: left;
+    letter-spacing: -0.02em;
     display: flex; align-items: center; gap: 18px; color: #fff;
     -webkit-backdrop-filter: blur(14px) saturate(150%);
     backdrop-filter: blur(14px) saturate(150%);
@@ -374,22 +360,22 @@
     background: linear-gradient(130deg,
       color-mix(in srgb, var(--ok) 94%, transparent),
       color-mix(in srgb, var(--ok) 72%, transparent));
-    box-shadow: 0 20px 40px -14px color-mix(in srgb, var(--ok) 55%, transparent);
+    box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--ok) 45%, transparent);
   }
   .verdict.ok::before { content: "✓"; }
   .verdict.bad {
     background: linear-gradient(130deg,
       color-mix(in srgb, var(--bad) 94%, transparent),
       color-mix(in srgb, var(--bad) 72%, transparent));
-    box-shadow: 0 20px 40px -14px color-mix(in srgb, var(--bad) 55%, transparent);
+    box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--bad) 45%, transparent);
   }
   .verdict.bad::before { content: "!"; }
   .check {
     background: var(--glass); border: 1px solid var(--glass-edge); border-left: 4px solid var(--ok);
     border-radius: 14px; padding: 14px 18px; margin-top: 10px;
-    -webkit-backdrop-filter: blur(14px) saturate(150%);
-    backdrop-filter: blur(14px) saturate(150%);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.25), var(--shadow-sm);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    backdrop-filter: blur(20px) saturate(150%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.4), var(--shadow-sm);
   }
   [data-theme="dark"] .check { box-shadow: inset 0 1px 0 rgba(255,255,255,.05), var(--shadow-sm); }
   .check:has(.tag.bad) { border-left-color: var(--bad); }
@@ -400,44 +386,44 @@
   .panel {
     background: var(--glass); border: 1px solid var(--glass-edge); border-radius: 16px;
     padding: 26px; margin-top: 16px;
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    backdrop-filter: blur(18px) saturate(160%);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.3), var(--glass-shadow);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    backdrop-filter: blur(20px) saturate(150%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.4), var(--shadow);
   }
-  [data-theme="dark"] .panel { box-shadow: inset 0 1px 0 rgba(255,255,255,.06), var(--glass-shadow); }
+  [data-theme="dark"] .panel { box-shadow: inset 0 1px 0 rgba(255,255,255,.05), var(--shadow); }
   .panel h2 { margin: 0 0 10px; font-size: 1.2rem; }
   .panel p { margin: 8px 0; }
   .panel .hint { font-family: var(--body); font-size: .85rem; letter-spacing: 0; text-transform: none; }
   .owed {
     font-family: var(--display); font-size: clamp(2.8rem, 6.5vw, 4rem); font-weight: 700;
-    line-height: 1.05; margin: 6px 0 10px; letter-spacing: -0.02em;
+    line-height: 1.05; margin: 6px 0 10px; letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
     background: linear-gradient(92deg, var(--accent), var(--amber));
     -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent; color: transparent;
   }
-  #letterpanel {
-    background: linear-gradient(var(--glass-strong), var(--glass-strong)) padding-box;
-  }
+  #letterpanel { background: var(--glass-strong); }
   textarea {
     width: 100%; min-height: 320px; padding: 18px; border-radius: 12px; resize: vertical;
     border: 1px solid var(--border);
     background: color-mix(in srgb, var(--surface) 72%, transparent); color: var(--ink);
     font-family: var(--mono); font-size: .85rem; line-height: 1.6;
-    box-shadow: inset 0 1px 3px rgba(16,20,24,.05);
+    box-shadow: inset 0 1px 3px rgba(23,19,16,.05);
   }
   .row { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
 
-  /* ---------- Bento sections ---------- */
-  .section { padding: 68px 0 0; }
+  /* Sections: hairline rhythm, calm panels. */
+  .section { margin-top: 72px; padding-top: 54px; border-top: 1px solid var(--border); }
   .section-head { max-width: 640px; margin-bottom: 28px; }
-  .section-head h2 { font-size: 1.9rem; margin: 0 0 8px; }
+  .section-head h2 { font-size: 1.75rem; margin: 0 0 8px; }
   .section-head p { color: var(--muted); margin: 0; }
   .bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
   .cell {
-    border-radius: 18px; padding: 26px;
-    transition: transform .25s ease, box-shadow .25s ease;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 26px; box-shadow: var(--shadow-sm);
+    transition: transform .16s ease, box-shadow .16s ease;
   }
-  .cell:hover { transform: translateY(-3px); }
+  .cell:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
   .step-a { grid-column: span 3; }
   .step-b { grid-column: span 3; }
   .step-c { grid-column: span 2; }
@@ -449,7 +435,7 @@
   .cell h3 { margin: 14px 0 6px; font-size: 1.15rem; }
   .cell p { margin: 0; color: var(--muted); font-size: .95rem; }
   .honesty-cell {
-    border-left: 4px solid var(--accent);
+    border-left: 3px solid var(--accent);
     display: flex; flex-direction: column; justify-content: center;
   }
   .honesty-cell h3 { margin-top: 0; font-size: 1.3rem; }
@@ -459,41 +445,54 @@
   .provider-card {
     position: relative; overflow: hidden;
     grid-column: span 2;
-    border-radius: 16px; padding: 22px 24px;
+    background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+    border-radius: 14px; padding: 22px 24px;
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    transition: transform .25s ease, box-shadow .25s ease;
+    transition: transform .16s ease, box-shadow .16s ease;
   }
   .provider-card::before {
     content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0;
     background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%),
-      color-mix(in srgb, var(--accent) 16%, transparent), transparent 65%);
-    transition: opacity .25s ease;
+      color-mix(in srgb, var(--accent) 10%, transparent), transparent 65%);
+    transition: opacity .16s ease;
   }
-  .provider-card:hover { transform: translateY(-3px); }
+  .provider-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
   .provider-card:hover::before { opacity: 1; }
   .provider-card .pname { font-weight: 600; position: relative; }
   .provider-card .sla { font-family: var(--mono); font-size: .82rem; color: var(--accent); font-weight: 600; white-space: nowrap; position: relative; }
-  .provider-card.muted-card { grid-column: span 6; box-shadow: none; justify-content: flex-start; }
+  .provider-card.muted-card { grid-column: span 6; background: var(--surface-2); box-shadow: none; justify-content: flex-start; }
   .provider-card.muted-card .pname { color: var(--muted); font-weight: 500; font-size: .93rem; }
 
-  /* ---------- Footer ---------- */
+  /* Footer: a slim strip, nothing more. */
   footer {
-    color: var(--muted); font-size: .88rem; margin-top: 60px;
-    border-top: 1px solid var(--border); padding-top: 28px;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 8px 40px;
+    margin-top: 72px; border-top: 1px solid var(--border);
+    padding: 22px 0 10px; color: var(--muted);
     position: relative; z-index: 1;
   }
-  footer p { margin: 0 0 10px; }
-  footer .foot-brand { font-family: var(--display); font-weight: 700; color: var(--ink); font-size: 1rem; }
+  .foot-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px 20px; flex-wrap: wrap;
+  }
+  .foot-brand {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--display); font-weight: 700; color: var(--ink);
+    font-size: .95rem; letter-spacing: -0.02em;
+  }
+  .foot-note { font-size: .82rem; }
+  .foot-links { display: flex; gap: 18px; }
+  .foot-links a { color: var(--muted); font-size: .82rem; font-weight: 500; transition: color .16s ease; }
+  .foot-links a:hover { color: var(--ink); text-decoration: none; }
+  .foot-fine { font-size: 11px; line-height: 1.6; margin: 14px 0 0; max-width: 720px; }
 
-  /* ---------- Responsive ---------- */
+  /* Responsive */
   @media (max-width: 760px) {
-    .nav-inner { padding: 0 16px; gap: 14px; }
-    .nav-links { gap: 14px; }
-    .nav-links a:not(.gh) { display: none; }
-    .pill { display: none; }
-    main { padding: 0 16px 56px; }
-    .hero { padding: 46px 0 30px; }
+    .nav { top: 10px; margin-top: 10px; padding: 0 16px; }
+    .nav-inner { height: 60px; padding: 0 10px 0 14px; gap: 12px; }
+    .nav-links { gap: 12px; }
+    .nav-links a:not(.nav-cta) { display: none; }
+    .pill, .nav-div, .nav-context { display: none; }
+    main { padding: 0 16px 40px; }
+    .hero { padding: 44px 0 30px; }
     .stats { padding: 18px 20px; }
     .stats li { padding: 2px 16px; }
     .stats li:first-child { padding-left: 0; }
@@ -502,7 +501,6 @@
     .checker-card { padding: 22px; }
     .bento, .providers { grid-template-columns: 1fr; }
     .step-a, .step-b, .step-c, .honesty-cell, .provider-card, .provider-card.muted-card { grid-column: span 1; }
-    footer { grid-template-columns: 1fr; }
     .verdict { padding: 20px; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -527,7 +525,7 @@
 <header class="nav">
   <div class="nav-inner">
     <a class="brand" href="#top" aria-label="DownProof home">
-      <svg width="30" height="30" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <svg width="28" height="28" viewBox="0 0 64 64" fill="none" aria-hidden="true">
         <rect x="10" y="8" width="8" height="48" rx="4" fill="#FF4D00"/>
         <rect x="22" y="8" width="8" height="45" rx="4" fill="currentColor"/>
         <rect x="34" y="8" width="8" height="37" rx="4" fill="currentColor"/>
@@ -535,15 +533,17 @@
       </svg>
       <span>DownProof</span>
     </a>
+    <span class="nav-div" aria-hidden="true"></span>
+    <span class="nav-context">SLA claims</span>
     <nav class="nav-links">
       <a href="#how">How it works</a>
       <a href="#providers">Providers</a>
       <span class="pill"><span class="dot"></span>Miner live · Sepolia</span>
-      <a class="gh" href="https://github.com/Jacksonx28/downproof" target="_blank" rel="noopener">GitHub</a>
       <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
         <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
         <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
       </button>
+      <a class="nav-cta" href="#checker">Run a check</a>
     </nav>
   </div>
 </header>
@@ -551,16 +551,16 @@
 <main id="top">
   <section class="hero">
     <p class="eyebrow reveal">Telegraph Protocol · Season II · Mission 15</p>
-    <p class="badge glass reveal" style="--d:.06s"><span class="dot"></span>Live on Telegraph · Miner active</p>
+    <p class="badge reveal" style="--d:.06s"><span class="dot"></span>Live on Telegraph · Miner active</p>
     <h1 class="reveal" style="--d:.12s">Was your provider down? <span class="hl">Find out what you&rsquo;re owed.</span></h1>
-    <p class="sub reveal" style="--d:.18s">DownProof runs independent uptime checks against a standard SLA — the service must be up and
-    answer within 1,000&nbsp;ms — served live by the DownProof miner. If the SLA is breached, it works out the
+    <p class="sub reveal" style="--d:.18s">DownProof runs independent uptime checks against a standard SLA (the service must be up and
+    answer within 1,000&nbsp;ms), served live by the DownProof miner. If the SLA is breached, it works out the
     credit from the provider&rsquo;s own published table and drafts the claim. If the SLA is met, it says so. No fake claims.</p>
     <div class="cta-row reveal" style="--d:.24s">
       <a class="btn primary" href="#checker">Run a check <span class="arr" aria-hidden="true">&rarr;</span></a>
       <a class="btn ghost" href="#how">See how it works</a>
     </div>
-    <ul class="stats glass reveal" style="--d:.3s">
+    <ul class="stats reveal" style="--d:.3s">
       <li><strong><span class="tick" data-count="0.01" data-decimals="2">0.01</span> USDC</strong>per check</li>
       <li><strong><span class="tick" data-count="2">2</span></strong>Telegraph intents</li>
       <li><strong><span class="tick" data-count="6">6</span></strong>provider SLA tables</li>
@@ -571,7 +571,7 @@
   <section id="checker" class="checker-card reveal">
     <div class="checker-head">
       <h2>Run a check</h2>
-      <p>Live checks, served by the DownProof miner — a proof pack in seconds.</p>
+      <p>Live checks, served by the DownProof miner: a proof pack in seconds.</p>
     </div>
     <form id="form">
       <div class="form-grid">
@@ -592,7 +592,7 @@
           </select>
         </div>
         <div class="field">
-          <label for="checks">Number of checks <span class="hint">A proof pack — more checks are harder to dismiss</span></label>
+          <label for="checks">Number of checks <span class="hint">A proof pack: more checks are harder to dismiss</span></label>
           <select id="checks">
             <option value="1">1</option>
             <option value="2" selected>2</option>
@@ -602,11 +602,11 @@
           </select>
         </div>
         <div class="field">
-          <label for="bill">Monthly bill in USD <span class="hint">Optional — for the amount-owed calculation</span></label>
+          <label for="bill">Monthly bill in USD <span class="hint">Optional, for the amount-owed calculation</span></label>
           <input id="bill" type="number" min="0" step="0.01" placeholder="e.g. 1000">
         </div>
         <div class="field">
-          <label for="uptime">Measured uptime % for the month <span class="hint">Optional — from your own monitoring; never guess it</span></label>
+          <label for="uptime">Measured uptime % for the month <span class="hint">Optional, from your own monitoring; never guess it</span></label>
           <input id="uptime" type="number" min="0" max="100" step="0.01" placeholder="e.g. 98.5">
         </div>
       </div>
@@ -635,24 +635,24 @@
       <p>Three steps between &ldquo;I think they were down&rdquo; and a claim a provider can&rsquo;t wave away.</p>
     </div>
     <div class="bento">
-      <div class="cell glass step step-a reveal">
+      <div class="cell step step-a reveal">
         <span class="num">01</span>
         <h3>We check</h3>
-        <p>Independent live checks run through the DownProof miner on Telegraph — not your word against theirs, a third party&rsquo;s measurement with a receipt.</p>
+        <p>Independent live checks run through the DownProof miner on Telegraph, not your word against theirs: a third party&rsquo;s measurement with a receipt.</p>
       </div>
-      <div class="cell glass step step-b reveal" style="--d:.08s">
+      <div class="cell step step-b reveal" style="--d:.08s">
         <span class="num">02</span>
         <h3>We compare</h3>
-        <p>The results are measured against the provider&rsquo;s own published SLA credit tiers — their table, their commitment, their numbers.</p>
+        <p>The results are measured against the provider&rsquo;s own published SLA credit tiers: their table, their commitment, their numbers.</p>
       </div>
-      <div class="cell glass step step-c reveal">
+      <div class="cell step step-c reveal">
         <span class="num">03</span>
         <h3>You claim</h3>
-        <p>You get a ready-to-send claim letter with the full proof pack and the claim-by deadline — or a signed honesty record when there&rsquo;s no breach.</p>
+        <p>You get a ready-to-send claim letter with the full proof pack and the claim-by deadline, or a signed honesty record when there&rsquo;s no breach.</p>
       </div>
-      <div class="cell glass honesty-cell reveal" style="--d:.08s">
+      <div class="cell honesty-cell reveal" style="--d:.08s">
         <h3>No breach? No claim.</h3>
-        <p><strong>DownProof writes a signed honesty record instead</strong> — it talks users out of false claims, not just into real ones. Every check is on the record either way.</p>
+        <p><strong>DownProof writes a signed honesty record instead:</strong> it talks users out of false claims, not just into real ones. Every check is on the record either way.</p>
       </div>
     </div>
   </section>
@@ -660,37 +660,44 @@
   <section id="providers" class="section">
     <div class="section-head reveal">
       <h2>Providers covered</h2>
-      <p>Credit tiers are taken from each provider&rsquo;s published SLA. If a provider isn&rsquo;t listed, DownProof still runs the check — it just won&rsquo;t invent a figure.</p>
+      <p>Credit tiers are taken from each provider&rsquo;s published SLA. If a provider isn&rsquo;t listed, DownProof still runs the check; it just won&rsquo;t invent a figure.</p>
     </div>
     <div class="providers">
-      <div class="provider-card glass spot reveal"><span class="pname">AWS EC2</span><span class="sla">99.99% SLA</span></div>
-      <div class="provider-card glass spot reveal" style="--d:.06s"><span class="pname">AWS S3</span><span class="sla">99.9% SLA</span></div>
-      <div class="provider-card glass spot reveal" style="--d:.12s"><span class="pname">Azure VMs</span><span class="sla">99.99% SLA</span></div>
-      <div class="provider-card glass spot reveal"><span class="pname">Google Compute Engine</span><span class="sla">99.99% SLA</span></div>
-      <div class="provider-card glass spot reveal" style="--d:.06s"><span class="pname">Cloudflare Workers</span><span class="sla">99.99% SLA</span></div>
-      <div class="provider-card glass spot reveal" style="--d:.12s"><span class="pname">DigitalOcean Spaces</span><span class="sla">99.9% SLA</span></div>
-      <div class="provider-card glass muted-card reveal"><span class="pname">Other providers — verdict only, we never guess a figure</span></div>
+      <div class="provider-card spot reveal"><span class="pname">AWS EC2</span><span class="sla">99.99% SLA</span></div>
+      <div class="provider-card spot reveal" style="--d:.06s"><span class="pname">AWS S3</span><span class="sla">99.9% SLA</span></div>
+      <div class="provider-card spot reveal" style="--d:.12s"><span class="pname">Azure VMs</span><span class="sla">99.99% SLA</span></div>
+      <div class="provider-card spot reveal"><span class="pname">Google Compute Engine</span><span class="sla">99.99% SLA</span></div>
+      <div class="provider-card spot reveal" style="--d:.06s"><span class="pname">Cloudflare Workers</span><span class="sla">99.99% SLA</span></div>
+      <div class="provider-card spot reveal" style="--d:.12s"><span class="pname">DigitalOcean Spaces</span><span class="sla">99.9% SLA</span></div>
+      <div class="provider-card muted-card reveal"><span class="pname">Other providers: verdict only, we never guess a figure</span></div>
     </div>
   </section>
 
   <footer>
-    <div>
-      <p class="foot-brand">DownProof</p>
-      <p>Checks are served by the DownProof miner (<a href="/health">/health</a> ·
-      <a href="/telegraph.yaml">/telegraph.yaml</a>) — live on the Telegraph network, Ethereum Sepolia.</p>
-      <p>Built for Telegraph Protocol Season II · <a href="https://github.com/Jacksonx28/downproof" target="_blank" rel="noopener">github.com/Jacksonx28/downproof</a></p>
+    <div class="foot-row">
+      <span class="foot-brand">
+        <svg width="18" height="18" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="10" y="8" width="8" height="48" rx="4" fill="#FF4D00"/>
+          <rect x="22" y="8" width="8" height="45" rx="4" fill="currentColor"/>
+          <rect x="34" y="8" width="8" height="37" rx="4" fill="currentColor"/>
+          <rect x="46" y="8" width="8" height="25" rx="4" fill="currentColor"/>
+        </svg>
+        DownProof
+      </span>
+      <span class="foot-note">Built for Telegraph Protocol Season II</span>
+      <nav class="foot-links">
+        <a href="/health">Miner health</a>
+        <a href="/telegraph.yaml">Descriptor</a>
+        <a href="https://github.com/Jacksonx28/downproof" target="_blank" rel="noopener">GitHub</a>
+      </nav>
     </div>
-    <div>
-      <p>Credit tiers come from each provider&rsquo;s own published SLA page, checked 22 Nov 2026.
-      Credits are a percentage of the affected service&rsquo;s monthly bill, usually applied against
-      future bills, not cash.</p>
-    </div>
+    <p class="foot-fine">Credit tiers come from each provider&rsquo;s own published SLA page, checked 22 Nov 2026. Credits are a percentage of the affected service&rsquo;s monthly bill, usually applied against future bills, not cash.</p>
   </footer>
 </main>
 <script>
 "use strict";
 
-// Provider SLA credit tiers — mirrors app/sla_credits.py TABLES exactly
+// Provider SLA credit tiers: mirrors app/sla_credits.py TABLES exactly
 // (checked against each provider's own SLA page, 22 Nov 2026). If a
 // provider is not listed here we never guess a credit figure.
 const TABLES = {
@@ -789,8 +796,8 @@ function render(url, providerKey, providerName, bill, uptime, results, checkedAt
   const verdict = $("verdict");
   verdict.className = "verdict " + (breached ? "bad" : "ok");
   verdict.textContent = breached
-    ? "SLA BREACHED — " + breachedCount + " of " + results.length + " check(s) breached"
-    : "SLA MET — no breach found";
+    ? "SLA BREACHED: " + breachedCount + " of " + results.length + " check(s) breached"
+    : "SLA MET: no breach found";
 
   $("checklist").innerHTML = results.map((r, i) => {
     const b = r.sla && r.sla.breached;
@@ -800,7 +807,7 @@ function render(url, providerKey, providerName, bill, uptime, results, checkedAt
       + "<p>" + escapeHtml(r.sla ? r.sla.summary : "") + "</p></div>";
   }).join("");
 
-  // Owed-money calculation — only with bill + uptime + a listed provider.
+  // Owed-money calculation: only with bill + uptime + a listed provider.
   let owed = null;
   let owedHtml = "";
   if (breached && providerKey !== "other" && bill !== null && uptime !== null) {
@@ -817,25 +824,25 @@ function render(url, providerKey, providerName, bill, uptime, results, checkedAt
       + '<p class="hint">Source: <a href="' + owed.source + '">' + owed.source + "</a><br>" + CAVEAT + "</p></div>";
   } else if (breached && providerKey === "other") {
     owedHtml = '<div class="panel"><h2>Amount owed</h2><p>The SLA was breached, but this provider is not in '
-      + "our published credit table, so the amount owed can't be calculated here — we never guess a figure. "
+      + "our published credit table, so the amount owed can't be calculated here. We never guess a figure. "
       + "Check the provider's own SLA for its credit tiers, and use the claim letter below as evidence.</p></div>";
   } else if (breached && (bill === null || uptime === null)) {
     owedHtml = '<div class="panel"><h2>Amount owed</h2><p>The SLA was breached. To calculate the credit, '
-      + "add your monthly bill and your measured monthly uptime % above and run the checks again — "
+      + "add your monthly bill and your measured monthly uptime % above and run the checks again. "
       + "a single snapshot cannot invent a monthly uptime figure.</p></div>";
   } else if (!breached) {
-    owedHtml = '<div class="panel"><h2>No breach — nothing owed</h2><p>Every check came back within the SLA, '
+    owedHtml = '<div class="panel"><h2>No breach: nothing owed</h2><p>Every check came back within the SLA, '
       + "so there is no claim to file. The honesty record below exists so a provider (and anyone reviewing "
       + "DownProof) can see it talks users out of false claims, not just into real ones.</p></div>";
   }
   $("owedpanel").innerHTML = owedHtml;
 
-  // Letter / honesty record — mirrors app/downproof.py output.
+  // Letter / honesty record: mirrors app/downproof.py output.
   let text, title, fname;
   if (breached) {
     title = "Your claim letter"; fname = "claim.md";
     const lines = [
-      "To: " + providerName + " — Support / SLA Claims",
+      "To: " + providerName + " Support / SLA Claims",
       "From: A DownProof user",
       "Date: " + fmtDateUTC(checkedAt),
       "Subject: SLA compensation claim for " + url,
@@ -851,7 +858,7 @@ function render(url, providerKey, providerName, bill, uptime, results, checkedAt
     });
     if (owed) {
       lines.push("",
-        "Amount owed (per your own published SLA table — " + owed.label + "):",
+        "Amount owed (per your own published SLA table, " + owed.label + "):",
         "- Monthly uptime: " + owed.uptime + "% (commitment " + owed.commitment + "%)",
         "- Credit tier: " + owed.creditPct + "% of the affected service's monthly bill",
         "- Monthly bill supplied: " + money(owed.bill) + " -> credit owed: " + money(owed.creditUsd),
@@ -863,7 +870,7 @@ function render(url, providerKey, providerName, bill, uptime, results, checkedAt
           + " days from this check). Missing the window is the most common reason valid claims die.");
       }
     } else if (providerKey === "other") {
-      lines.push("", "Amount owed: not calculated — the provider/service is not in our published credit table; check its SLA directly.");
+      lines.push("", "Amount owed: not calculated. The provider/service is not in our published credit table; check its SLA directly.");
     }
     lines.push("",
       "Cost of proof: " + results.length + " check(s) served by the DownProof miner (downproof-uptime) from downproof.vercel.app. No charge was made from this web page; the miner's listed price on Telegraph is 0.01 USDC per check.",
@@ -871,14 +878,14 @@ function render(url, providerKey, providerName, bill, uptime, results, checkedAt
       "",
       "Please credit the account per the SLA compensation terms and confirm in writing.",
       "",
-      "— Generated automatically by DownProof");
+      "Generated automatically by DownProof");
     text = lines.join("\n");
   } else {
-    title = "Honesty record — no claim filed"; fname = "no_breach.md";
+    title = "Honesty record: no claim filed"; fname = "no_breach.md";
     text = [
-      "SLA met — no claim filed",
+      "SLA met: no claim filed",
       "Service: " + url + " (" + providerName + ")",
-      "Checked: " + fmtDateUTC(checkedAt) + " — " + results.length + " check(s), all within the SLA",
+      "Checked: " + fmtDateUTC(checkedAt) + " · " + results.length + " check(s), all within the SLA",
       "Evidence: " + first.summary,
       "Cost of proof: " + results.length + " check(s) served by the DownProof miner (downproof-uptime) from downproof.vercel.app at no charge from this web page.",
       "This record exists so a provider (and a judge) can see DownProof talks users out of false claims, not just into real ones."
@@ -950,7 +957,7 @@ $("download").addEventListener("click", () => {
 
     if (!("IntersectionObserver" in window)) return;
 
-    // Scroll reveals — only hidden once we know we can reveal them again.
+    // Scroll reveals: only hidden once we know we can reveal them again.
     if (!reduced) {
       document.documentElement.classList.add("anim");
       var revealer = new IntersectionObserver(function (entries) {
