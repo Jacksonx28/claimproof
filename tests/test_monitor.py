@@ -3,7 +3,7 @@ import sys
 import unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "miner"))
-from monitor import check_url, sla_verdict, UptimeResult  # noqa: E402
+from monitor import check_url, sla_verdict, sla_compliance_fields, UptimeResult  # noqa: E402
 
 
 class TestMonitor(unittest.TestCase):
@@ -28,6 +28,34 @@ class TestMonitor(unittest.TestCase):
     def test_sla_met(self):
         v = sla_verdict(UptimeResult("https://x", True, 200, 120, None, "up"), max_latency_ms=1000)
         self.assertFalse(v["breached"])
+
+    # SLA_COMPLIANCE_GENERAL published response fields (devnode intent record,
+    # format_version 4): service, uptime_pct, sla_target_pct, compliant, period.
+    def test_compliance_fields_up_and_met(self):
+        r = UptimeResult("https://x", True, 200, 120, None, "up")
+        f = sla_compliance_fields(r, sla_verdict(r, max_latency_ms=1000))
+        self.assertEqual(f["service"], "https://x")
+        self.assertEqual(f["uptime_pct"], 100.0)
+        self.assertTrue(f["compliant"])
+        self.assertEqual(f["period"], "instant (single live check)")
+        self.assertNotIn("sla_target_pct", f)  # never invented when not supplied
+
+    def test_compliance_fields_down(self):
+        r = UptimeResult("https://x", False, None, 10, "DNS", "down")
+        f = sla_compliance_fields(r, sla_verdict(r))
+        self.assertEqual(f["uptime_pct"], 0.0)
+        self.assertFalse(f["compliant"])
+
+    def test_compliance_fields_target_echoed_and_applied(self):
+        r = UptimeResult("https://x", True, 200, 120, None, "up")
+        f = sla_compliance_fields(r, sla_verdict(r, max_latency_ms=1000), sla_target_pct=99.9)
+        self.assertEqual(f["sla_target_pct"], 99.9)
+        self.assertTrue(f["compliant"])  # 100.0 >= 99.9 and latency within SLA
+
+    def test_compliance_fields_latency_breach_still_noncompliant(self):
+        r = UptimeResult("https://x", True, 200, 2500, None, "up")
+        f = sla_compliance_fields(r, sla_verdict(r, max_latency_ms=1000), sla_target_pct=99.0)
+        self.assertFalse(f["compliant"])  # availability fine, latency SLA breached
 
 
 if __name__ == "__main__":
