@@ -615,10 +615,6 @@
   .steps { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 36px; }
   .steps .cell { grid-column: auto; }
   .section-note { margin-top: 28px; }
-  .table-wrap { overflow-x: auto; margin-top: 8px; }
-  table.ledger { width: 100%; border-collapse: collapse; font-size: .92rem; min-width: 640px; }
-  table.ledger th, table.ledger td { text-align: left; padding: 10px; border-top: 1px solid var(--border); vertical-align: top; }
-  table.ledger thead th { border-top: 0; font-family: var(--mono); font-size: .7rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
   .empty-state { border: 1px dashed var(--border); border-radius: 14px; padding: 30px 26px; text-align: center; color: var(--muted); background: var(--surface-2); margin-top: 16px; font-size: .98rem; }
   .totals { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
   .big-num { font-family: var(--display); font-size: 2.3rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; font-variant-numeric: tabular-nums; }
@@ -630,60 +626,89 @@
   .chip.status-ok { color: var(--ok); background: var(--ok-bg); border-color: var(--ok-border); }
   .chip.status-bad { color: var(--bad); background: var(--bad-bg); border-color: var(--bad-border); }
   .chip.status-muted { color: var(--muted); background: var(--surface-2); border-color: var(--border); }
-  .attempts-summary { font-family: var(--mono); font-size: .85rem; color: var(--muted); margin: 0 0 6px; }
-  .attempt-note { display: block; color: var(--muted); font-size: .88rem; margin-top: 3px; }
+  .attempts-summary { font-family: var(--mono); font-size: .85rem; color: var(--muted); margin: 0 0 14px; }
   .attach-list { margin: 10px 0 0; padding-left: 20px; }
   .attach-list li { margin: 6px 0; }
   .loading-note { color: var(--muted); }
-  /* The purchase target URL rides inside the intent cell but is only
-     shown in the mobile stacked layout, where it gets its own line. */
-  .row-url { display: none; }
-  /* Pagination: a quiet count line and a Show more button under each table. */
+  /* Pagination: a quiet count line and a Show more button under each list. */
   .pager { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 16px; }
   .pager-count { font-family: var(--mono); font-size: .85rem; color: var(--muted); }
+
+  /* Activity feed: the purchases and attempts lists. A calm centred
+     column of summary rows; the full record opens in place under a row.
+     Borrowed from Stripe's payments list and wallet-style activity feeds:
+     a status dot, one plain sentence, quiet metadata, detail on tap. */
+  .feed-col { max-width: 720px; margin-left: auto; margin-right: auto; }
+  .feed-col .section-head { max-width: none; }
+  .feed-list { list-style: none; margin: 0; padding: 0; }
+  .entry { border-top: 1px solid var(--border); }
+  .entry:first-child { border-top: 0; }
+  .entry-head {
+    display: flex; align-items: flex-start; gap: 12px; width: 100%;
+    padding: 15px 6px; margin: 0; text-align: left;
+    background: none; border: 0; border-radius: 10px;
+    color: var(--ink); font-family: var(--body); font-size: 1rem; font-weight: 400;
+    cursor: pointer; transition: background-color .16s ease;
+  }
+  .entry-head:hover { background: color-mix(in srgb, var(--surface-2) 65%, transparent); }
+  .entry-head:active { transform: none; }
+  .entry-dot { width: 9px; height: 9px; border-radius: 50%; flex: none; margin-top: 7px; background: var(--muted); }
+  .entry-dot.ok { background: var(--ok); }
+  .entry-dot.bad { background: var(--bad); }
+  .entry-dot.warn { background: var(--amber); }
+  .entry-main { flex: 1 1 auto; min-width: 0; }
+  .entry-title { display: block; font-weight: 600; font-size: .99rem; line-height: 1.35; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+  .entry-sub { display: block; color: var(--muted); font-size: .85rem; margin-top: 3px; line-height: 1.45; overflow-wrap: anywhere; }
+  .entry-side { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; padding-top: 1px; }
+  .entry-tag {
+    font-family: var(--mono); font-size: .68rem; font-weight: 600; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--muted);
+    border: 1px solid var(--border); border-radius: 999px; padding: 3px 8px;
+    background: var(--surface-2); white-space: nowrap;
+  }
+  .entry-hash { font-family: var(--mono); font-size: .74rem; color: var(--muted); white-space: nowrap; }
+  .entry-chev { flex: none; color: var(--muted); font-size: 1.05rem; line-height: 1; margin-top: 3px; transition: transform .2s ease; }
+  .entry.open .entry-chev { transform: rotate(90deg); }
+  .entry-detail { padding: 0 6px 18px 27px; animation: detailIn .25s ease; }
+  @keyframes detailIn { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: none; } }
+  .d-panel { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 6px 16px; }
+  .d-row { display: flex; gap: 14px; padding: 9px 0; border-top: 1px solid var(--border); font-size: .9rem; }
+  .d-row:first-child { border-top: 0; }
+  .d-row .dk { color: var(--muted); flex: 0 0 86px; font-size: .85rem; padding-top: 1px; }
+  .d-row .dv { flex: 1 1 auto; min-width: 0; font-weight: 500; overflow-wrap: anywhere; }
+  .d-row .dv.mono { font-family: var(--mono); font-size: .8rem; line-height: 1.6; }
+  .d-row .dv.plain { font-weight: 400; line-height: 1.55; }
+  .copy-btn {
+    flex: none; align-self: flex-start;
+    background: var(--surface); color: var(--ink); border: 1px solid var(--border);
+    border-radius: 8px; padding: 5px 11px; font-size: .78rem; font-weight: 600;
+    font-family: var(--body); cursor: pointer;
+    transition: background-color .16s ease, border-color .16s ease;
+  }
+  .copy-btn:hover { background: var(--surface); border-color: var(--muted); }
+  .copy-btn:active { transform: none; }
+  /* Attempts filters: quiet chips above the list, counts on the chips. */
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 8px; }
+  .fchip {
+    font-family: var(--body); font-size: .85rem; font-weight: 500;
+    padding: 7px 13px; border-radius: 999px; cursor: pointer;
+    background: var(--surface); color: var(--muted); border: 1px solid var(--border);
+    transition: background-color .16s ease, color .16s ease, border-color .16s ease;
+  }
+  .fchip:hover { background: var(--surface-2); color: var(--ink); }
+  .fchip:active { transform: none; }
+  .fchip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .fchip .n { font-variant-numeric: tabular-nums; opacity: .65; margin-left: 3px; }
+  .feed-none { color: var(--muted); font-size: .95rem; padding: 18px 0 4px; margin: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .entry-detail { animation: none; }
+    .entry-chev { transition: none; }
+  }
   @media (max-width: 760px) {
     .cards, .steps, .totals { grid-template-columns: 1fr !important; }
     .page-hero { padding: 40px 0 6px; }
-    /* Ledger tables become stacked blocks on a phone: no sideways glide.
-       The header row goes away and each row wraps into lines, with the
-       long hashes given room to wrap inside the screen instead. */
-    .table-wrap { overflow-x: visible; }
-    table.ledger { min-width: 0; }
-    table.ledger thead { display: none; }
-    table.ledger tbody tr {
-      display: flex; flex-wrap: wrap; align-items: baseline;
-      gap: 3px 12px; padding: 16px 0; border-top: 1px solid var(--border);
-    }
-    table.ledger tbody tr:first-child { border-top: 0; padding-top: 6px; }
-    table.ledger td { border-top: 0; padding: 0; min-width: 0; }
-    /* Purchases: miner and outcome, URL and intent, cost and date, receipt. */
-    #ledger-wrap td:nth-child(3) { order: 1; font-weight: 600; font-size: 1rem; }
-    #ledger-wrap td:nth-child(6) { order: 2; margin-left: auto; text-align: right; font-weight: 600; font-size: .9rem; }
-    #ledger-wrap td:nth-child(2) {
-      order: 3; flex: 1 1 100%; margin-top: 4px;
-      display: flex; flex-direction: column; gap: 2px; overflow-wrap: anywhere;
-    }
-    #ledger-wrap .row-url {
-      display: block; order: -1;
-      font-family: var(--mono); font-size: .85rem; color: var(--ink); word-break: break-all;
-    }
-    #ledger-wrap td:nth-child(4) { order: 4; font-variant-numeric: tabular-nums; }
-    #ledger-wrap td:nth-child(1) { order: 5; color: var(--muted); font-family: var(--mono); font-size: .82rem; }
-    #ledger-wrap td:nth-child(5) {
-      order: 6; flex: 1 1 100%; margin-top: 8px;
-      font-size: .76rem; line-height: 1.55; word-break: break-all;
-      background: var(--surface-2); border: 1px solid var(--border);
-      border-radius: 8px; padding: 8px 10px;
-    }
-    /* Attempts: miner and status chip first, then target, intent, time
-       and cost, with the error or note wrapped underneath. */
-    #attempts-wrap td:nth-child(3) { order: 1; font-weight: 600; font-size: 1rem; }
-    #attempts-wrap td:nth-child(5) { order: 2; margin-left: auto; }
-    #attempts-wrap td:nth-child(4) { order: 3; flex: 1 1 100%; margin-top: 4px; word-break: break-all; }
-    #attempts-wrap td:nth-child(2) { order: 4; flex: 1 1 100%; overflow-wrap: anywhere; }
-    #attempts-wrap td:nth-child(1) { order: 5; color: var(--muted); font-size: .82rem; }
-    #attempts-wrap td:nth-child(6) { order: 6; font-variant-numeric: tabular-nums; }
-    #attempts-wrap td:nth-child(7) { order: 7; flex: 1 1 100%; margin-top: 4px; overflow-wrap: anywhere; }
+    .entry-detail { padding-left: 6px; }
+    .d-row .dk { flex-basis: 74px; }
   }
 </style>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='10' y='8' width='8' height='48' rx='4' fill='%23FF4D00'/%3E%3Crect x='22' y='8' width='8' height='45' rx='4' fill='%23101418'/%3E%3Crect x='34' y='8' width='8' height='37' rx='4' fill='%23101418'/%3E%3Crect x='46' y='8' width='8' height='25' rx='4' fill='%23101418'/%3E%3C/svg%3E">
@@ -776,46 +801,46 @@
       <div class="cell reveal" style="--d:.16s">
         <span class="num">03</span>
         <h3>Anyone can match it</h3>
-        <p>Match the receipt or signal ID in the table below against the engine record. That match is the proof attached to a claim.</p>
+        <p>Match the receipt or signal ID in the list below against the engine record. That match is the proof attached to a claim.</p>
       </div>
     </div>
   </section>
 
   <section class="section">
-    <div class="section-head reveal">
-      <h2>Purchases</h2>
-      <p>Paid engine purchases only. Free checks run from the homepage are not purchases and are never listed here as if they were.</p>
+    <div class="feed-col">
+      <div class="section-head reveal">
+        <h2>Purchases</h2>
+        <p>Paid engine purchases only. Free checks run from the homepage are not purchases and are never listed here as if they were. Tap any row for the full record.</p>
+      </div>
+      <div class="feed reveal" id="ledger-wrap">
+        <ul class="feed-list" id="ledger-body"></ul>
+      </div>
+      <div class="pager" id="ledger-pager" style="display:none">
+        <span class="pager-count" id="ledger-count"></span>
+        <button class="secondary" id="ledger-more" type="button">Show more</button>
+      </div>
+      <div class="empty-state reveal" id="ledger-empty" style="display:none">No engine purchases yet. The first live purchase runs on 24 Nov 2026 and its receipt will appear here.</div>
     </div>
-    <div class="table-wrap reveal" id="ledger-wrap">
-      <table class="ledger">
-        <thead><tr><th>Date</th><th>Intent</th><th>Miner</th><th>Cost</th><th>Receipt / signal ID</th><th>Outcome</th></tr></thead>
-        <tbody id="ledger-body"></tbody>
-      </table>
-    </div>
-    <div class="pager" id="ledger-pager" style="display:none">
-      <span class="pager-count" id="ledger-count"></span>
-      <button class="secondary" id="ledger-more" type="button">Show more</button>
-    </div>
-    <div class="empty-state reveal" id="ledger-empty" style="display:none">No engine purchases yet. The first live purchase runs on 24 Nov 2026 and its receipt will appear here.</div>
   </section>
 
   <section class="section">
-    <div class="section-head reveal">
-      <h2>All attempts</h2>
-      <p>Every engine ask, not just the ones that ended in a purchase. Bounces and server errors are logged with the error the engine returned, so a bug can be seen here and handled, not hidden.</p>
+    <div class="feed-col">
+      <div class="section-head reveal">
+        <h2>All attempts</h2>
+        <p>Every engine ask, not just the ones that ended in a purchase. Bounces and server errors are logged with the error the engine returned, so a bug can be seen here and handled, not hidden.</p>
+      </div>
+      <p class="attempts-summary reveal" id="attempts-summary">Loading the attempts log&hellip;</p>
+      <div class="filters reveal" id="attempts-filters" role="group" aria-label="Filter attempts by status"></div>
+      <div class="feed reveal" id="attempts-wrap">
+        <ul class="feed-list" id="attempts-body"></ul>
+      </div>
+      <p class="feed-none" id="attempts-none" style="display:none">No attempts with this status yet.</p>
+      <div class="pager" id="attempts-pager" style="display:none">
+        <span class="pager-count" id="attempts-count"></span>
+        <button class="secondary" id="attempts-more" type="button">Show more</button>
+      </div>
+      <div class="empty-state reveal" id="attempts-empty" style="display:none">No engine attempts logged yet.</div>
     </div>
-    <p class="attempts-summary reveal" id="attempts-summary">Loading the attempts log&hellip;</p>
-    <div class="table-wrap reveal" id="attempts-wrap">
-      <table class="ledger">
-        <thead><tr><th>Time (UTC)</th><th>Intent</th><th>Miner</th><th>Target</th><th>Status</th><th>Cost</th><th>Error / note</th></tr></thead>
-        <tbody id="attempts-body"></tbody>
-      </table>
-    </div>
-    <div class="pager" id="attempts-pager" style="display:none">
-      <span class="pager-count" id="attempts-count"></span>
-      <button class="secondary" id="attempts-more" type="button">Show more</button>
-    </div>
-    <div class="empty-state reveal" id="attempts-empty" style="display:none">No engine attempts logged yet.</div>
   </section>
   <footer>
     <div class="foot-row">
@@ -906,21 +931,135 @@
         var empty = document.getElementById("ledger-empty");
         if (!purchases.length) { wrap.style.display = "none"; empty.style.display = "block"; return; }
         empty.style.display = "none";
+        // Activity feed helpers: human dates, truncated hashes, plain
+        // language. The summary row shows only what a reader scans for;
+        // the full record opens in place under the row.
+        var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        function humanDate(iso) {
+          var d = new Date(iso);
+          if (!iso || isNaN(d.getTime())) return iso || "";
+          function pad(n) { return (n < 10 ? "0" : "") + n; }
+          return d.getDate() + " " + MONTHS[d.getMonth()] + ", " + pad(d.getHours()) + ":" + pad(d.getMinutes());
+        }
+        function truncHash(h) {
+          h = String(h || "");
+          return h.length > 14 ? h.slice(0, 6) + "…" + h.slice(-5) : h;
+        }
+        function hostname(url) {
+          try { return new URL(url).hostname; }
+          catch (e) { return String(url || "").replace(/^https?:\/\//, "").split("/")[0]; }
+        }
+        function intentTag(intent) {
+          if (intent === "SERVER_UPTIME_MONITOR_GENERAL") return "Uptime";
+          if (intent === "SLA_COMPLIANCE_GENERAL") return "SLA";
+          return String(intent || "").replace(/_GENERAL$/, "").replace(/_/g, " ");
+        }
+        function plainOutcome(p) {
+          var o = p.outcome || "";
+          if (/second opinion/i.test(o)) return "Down confirmed, second opinion";
+          if (/^SLA BREACHED/i.test(o)) return "SLA breached";
+          if (/^Insufficient data/i.test(o)) return "Insufficient data";
+          var up = o.match(/^UP in ([0-9.]+m?s)/i);
+          if (up) return "Up in " + up[1] + (/SLA MET/i.test(o) ? ", SLA met" : "");
+          if (/^SLA MET/i.test(o)) return "SLA met";
+          var first = o.split(/[:.]/)[0].trim();
+          return first ? first.charAt(0).toUpperCase() + first.slice(1) : "Check completed";
+        }
+        function verdictWord(v) {
+          if (v === "breach") return "Breached";
+          if (v === "no_breach") return "Met";
+          if (v === "insufficient_data") return "Insufficient data";
+          return v || "";
+        }
+        function dotClass(p) {
+          if (p.verdict === "breach") return "bad";
+          if (p.verdict === "insufficient_data") return "warn";
+          return "ok";
+        }
+        function wireCopy(root) {
+          root.querySelectorAll(".copy-btn").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              var text = btn.getAttribute("data-copy") || "";
+              function done() {
+                btn.textContent = "Copied";
+                setTimeout(function () { btn.textContent = "Copy"; }, 1600);
+              }
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(done, done);
+              } else {
+                var ta = document.createElement("textarea");
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand("copy"); } catch (e) { /* clipboard unavailable */ }
+                document.body.removeChild(ta);
+                done();
+              }
+            });
+          });
+        }
+        function dRow(k, v, cls) {
+          return '<div class="d-row"><span class="dk">' + esc(k) + '</span><span class="dv' + (cls ? " " + cls : "") + '">' + v + "</span></div>";
+        }
+        function hashRow(k, h) {
+          if (!h) return "";
+          return '<div class="d-row"><span class="dk">' + esc(k) + '</span><span class="dv mono">' + esc(h)
+            + '</span><button type="button" class="copy-btn" data-copy="' + esc(h) + '">Copy</button></div>';
+        }
+        function detail(p) {
+          var rows = "";
+          if (p.url) rows += dRow("Service", '<a href="' + esc(p.url) + '">' + esc(p.url) + "</a>", "mono");
+          if (p.intent) rows += dRow("Intent", esc(p.intent), "mono");
+          if (p.miner) rows += dRow("Miner", esc(p.miner) + (p.miner_id != null ? " (ID " + esc(p.miner_id) + ")" : ""));
+          if (p.date) rows += dRow("Date", esc(p.date), "mono");
+          if (p.verdict) rows += dRow("Verdict", esc(verdictWord(p.verdict)));
+          if (p.outcome) rows += dRow("Outcome", esc(p.outcome), "plain");
+          if (p.note) rows += dRow("Note", esc(p.note), "plain");
+          rows += hashRow("Receipt", p.receipt_id);
+          rows += hashRow("Signal", p.signal_id);
+          if (p.epoch_id != null) rows += dRow("Epoch", esc(p.epoch_id));
+          if (p.evidence) rows += dRow("Evidence", esc(p.evidence), "mono");
+          return rows;
+        }
         // Paginated in 10s, in the order the ledger stores them. Totals
         // above always cover every purchase, not just the ones on screen.
         var PAGE = 10;
         var shown = PAGE;
+        var openIdx = -1;
         var body = document.getElementById("ledger-body");
         var pager = document.getElementById("ledger-pager");
         var count = document.getElementById("ledger-count");
         var more = document.getElementById("ledger-more");
-        function render() {
-          body.innerHTML = purchases.slice(0, shown).map(function (p) {
-            return "<tr><td>" + esc(p.date || "") + "</td><td class='mono'>" + esc(p.intent || "")
-              + '<span class="row-url">' + esc(p.url || "") + "</span></td><td>"
-              + esc(p.miner || "") + "</td><td>" + (p.cost_usdc != null ? Number(p.cost_usdc).toFixed(2) + " USDC" : "")
-              + "</td><td class='mono'>" + esc(p.receipt_id || p.signal_id || "") + "</td><td>" + esc(p.outcome || "") + "</td></tr>";
+        function render(focusIdx) {
+          body.innerHTML = purchases.slice(0, shown).map(function (p, i) {
+            var open = i === openIdx;
+            var hash = p.receipt_id || p.signal_id || "";
+            var cost = p.cost_usdc != null ? Number(p.cost_usdc).toFixed(2) + " USDC" : "";
+            var html = '<li class="entry' + (open ? " open" : "") + '">'
+              + '<button type="button" class="entry-head" data-i="' + i + '" aria-expanded="' + (open ? "true" : "false") + '" aria-controls="ledger-detail-' + i + '">'
+              + '<span class="entry-dot ' + dotClass(p) + '" aria-hidden="true"></span>'
+              + '<span class="entry-main"><span class="entry-title">' + esc(plainOutcome(p)) + " · " + esc(hostname(p.url)) + "</span>"
+              + '<span class="entry-sub">' + esc(p.miner || "") + " · " + esc(humanDate(p.date)) + (cost ? " · " + esc(cost) : "") + "</span></span>"
+              + '<span class="entry-side"><span class="entry-tag">' + esc(intentTag(p.intent)) + "</span>"
+              + (hash ? '<span class="entry-hash">' + esc(truncHash(hash)) + "</span>" : "")
+              + '</span><span class="entry-chev" aria-hidden="true">›</span></button>';
+            if (open) {
+              html += '<div class="entry-detail" id="ledger-detail-' + i + '" role="region" aria-label="Purchase details"><div class="d-panel">' + detail(p) + "</div></div>";
+            }
+            return html + "</li>";
           }).join("");
+          body.querySelectorAll(".entry-head").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              var i = Number(btn.getAttribute("data-i"));
+              openIdx = openIdx === i ? -1 : i;
+              render(i);
+            });
+          });
+          wireCopy(body);
+          if (focusIdx != null && focusIdx >= 0) {
+            var b = body.querySelector('.entry-head[data-i="' + focusIdx + '"]');
+            if (b) b.focus();
+          }
           count.textContent = "Showing " + Math.min(shown, purchases.length) + " of " + purchases.length;
           more.style.display = shown < purchases.length ? "" : "none";
           pager.style.display = "flex";
@@ -935,7 +1074,8 @@
 </script>
 <script>
   // Attempts log: renders /attempts.json below the purchases ledger.
-  // Successes, failures and fallbacks are all shown; nothing is filtered out.
+  // Same activity feed as the purchases list, with status filter chips;
+  // the default view is every attempt, successes, failures and fallbacks.
   (function () {
     "use strict";
     function esc(s) {
@@ -943,11 +1083,97 @@
         return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
       });
     }
-    var CHIP = {
-      success: '<span class="chip status-ok">success</span>',
-      failed: '<span class="chip status-bad">failed</span>',
-      fallback: '<span class="chip status-muted">fallback</span>'
-    };
+    // Same feed helpers as the purchases list above.
+    var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    function humanDate(iso) {
+      var d = new Date(iso);
+      if (!iso || isNaN(d.getTime())) return iso || "";
+      function pad(n) { return (n < 10 ? "0" : "") + n; }
+      return d.getDate() + " " + MONTHS[d.getMonth()] + ", " + pad(d.getHours()) + ":" + pad(d.getMinutes());
+    }
+    function truncHash(h) {
+      h = String(h || "");
+      return h.length > 14 ? h.slice(0, 6) + "…" + h.slice(-5) : h;
+    }
+    function hostname(url) {
+      try { return new URL(url).hostname; }
+      catch (e) { return String(url || "").replace(/^https?:\/\//, "").split("/")[0]; }
+    }
+    function intentTag(intent) {
+      if (intent === "SERVER_UPTIME_MONITOR_GENERAL") return "Uptime";
+      if (intent === "SLA_COMPLIANCE_GENERAL") return "SLA";
+      return String(intent || "").replace(/_GENERAL$/, "").replace(/_/g, " ");
+    }
+    function wireCopy(root) {
+      root.querySelectorAll(".copy-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var text = btn.getAttribute("data-copy") || "";
+          function done() {
+            btn.textContent = "Copied";
+            setTimeout(function () { btn.textContent = "Copy"; }, 1600);
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done, done);
+          } else {
+            var ta = document.createElement("textarea");
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand("copy"); } catch (e) { /* clipboard unavailable */ }
+            document.body.removeChild(ta);
+            done();
+          }
+        });
+      });
+    }
+    function dRow(k, v, cls) {
+      return '<div class="d-row"><span class="dk">' + esc(k) + '</span><span class="dv' + (cls ? " " + cls : "") + '">' + v + "</span></div>";
+    }
+    function hashRow(k, h) {
+      if (!h) return "";
+      return '<div class="d-row"><span class="dk">' + esc(k) + '</span><span class="dv mono">' + esc(h)
+        + '</span><button type="button" class="copy-btn" data-copy="' + esc(h) + '">Copy</button></div>';
+    }
+    // The summary line for an attempt: what happened, in a few words,
+    // derived from the status and the recorded error or note.
+    function shortWhat(a) {
+      if (a.status === "failed") {
+        var e = a.error || "";
+        if (/period is required/.test(e)) return "Bounced: the period parameter was missing";
+        if (/service is required/.test(e)) return "Bounced: wrong parameters sent";
+        if (a.http_status === 500 || /status 500/.test(e)) return "Server error at the engine (500)";
+        return "Failed";
+      }
+      if (a.status === "fallback") return "No miner took the ask, a general model answered";
+      var n = a.note || "";
+      if (/cross-check/i.test(n)) return "Confirmed the service was down";
+      if (/Control purchase/i.test(n)) return "Control check: service up, SLA met";
+      if (/Control ask during/i.test(n)) return "Control check: engine and miner healthy";
+      if (/Competitor control/i.test(n)) return "Answered with no live check";
+      if (/SLA diagnostic/i.test(n)) return "SLA check accepted, one field missing";
+      if (/Confirmation ask/i.test(n)) return "SLA check accepted, every field ok";
+      if (/First live purchase/i.test(n)) return "Service down, SLA breached";
+      var s = n.split(". ")[0].replace(/\.$/, "");
+      return s.length > 72 ? s.slice(0, 72).replace(/\s+\S*$/, "") + "…" : s;
+    }
+    function statusWord(a) {
+      if (a.status === "success") return "Succeeded";
+      if (a.status === "failed") return "Failed";
+      if (a.status === "fallback") return "Fallback";
+      return a.status || "";
+    }
+    function detail(a) {
+      var rows = "";
+      if (a.target) rows += dRow("Target", '<a href="' + esc(a.target) + '">' + esc(a.target) + "</a>", "mono");
+      if (a.intent) rows += dRow("Intent", esc(a.intent), "mono");
+      rows += dRow("Miner", esc(a.miner_name || "") + (a.miner_id != null ? " (ID " + esc(a.miner_id) + ")" : ""));
+      if (a.date) rows += dRow("Time", esc(a.date), "mono");
+      rows += dRow("Status", esc(statusWord(a)) + (a.http_status != null ? " · HTTP " + esc(a.http_status) : ""));
+      if (a.error) rows += dRow("Error", esc(a.error), "plain");
+      if (a.note) rows += dRow("Note", esc(a.note), "plain");
+      rows += hashRow("Receipt", a.receipt_id);
+      return rows;
+    }
     fetch("/attempts.json")
       .then(function (r) { if (!r.ok) throw new Error("bad status"); return r.json(); })
       .then(function (data) {
@@ -961,30 +1187,81 @@
         var empty = document.getElementById("attempts-empty");
         if (!attempts.length) { wrap.style.display = "none"; empty.style.display = "block"; return; }
         empty.style.display = "none";
-        // Paginated in 10s, in the order the log stores them. The summary
-        // line above always counts every attempt, not just the ones shown.
+        // Filter chips with counts. The filter applies to the full set
+        // first, then the show-in-10s window applies to what is left.
+        // The summary line above always counts every attempt.
+        var FILTERS = [
+          { key: "all", label: "All", n: attempts.length },
+          { key: "success", label: "Succeeded", n: ok },
+          { key: "failed", label: "Failed", n: failed },
+          { key: "fallback", label: "Fallback", n: fb }
+        ];
+        var filter = "all";
+        var filtersEl = document.getElementById("attempts-filters");
+        filtersEl.innerHTML = FILTERS.map(function (f) {
+          return '<button type="button" class="fchip" data-filter="' + f.key + '" aria-pressed="' + (f.key === "all" ? "true" : "false") + '">' + esc(f.label) + '<span class="n">' + f.n + "</span></button>";
+        }).join("");
         var PAGE = 10;
         var shown = PAGE;
+        var openIdx = -1;
         var body = document.getElementById("attempts-body");
+        var none = document.getElementById("attempts-none");
         var pager = document.getElementById("attempts-pager");
         var count = document.getElementById("attempts-count");
         var more = document.getElementById("attempts-more");
-        function render() {
-          body.innerHTML = attempts.slice(0, shown).map(function (a) {
-            var detail = "";
-            if (a.error) detail += '<span class="mono">' + esc(a.error) + "</span>";
-            if (a.note) detail += '<span class="attempt-note">' + esc(a.note) + "</span>";
-            if (a.receipt_id) detail += '<span class="attempt-note mono">Receipt: ' + esc(a.receipt_id) + "</span>";
-            return "<tr><td class='mono'>" + esc(a.date || "") + "</td><td class='mono'>" + esc(a.intent || "") + "</td><td>"
-              + esc(a.miner_name || "") + "</td><td class='mono'>" + esc(a.target || "") + "</td><td>"
-              + (CHIP[a.status] || esc(a.status || "")) + "</td><td>"
-              + (a.cost_usdc != null ? Number(a.cost_usdc).toFixed(2) + " USDC" : "")
-              + "</td><td>" + detail + "</td></tr>";
+        function visible() {
+          return filter === "all" ? attempts : attempts.filter(function (a) { return a.status === filter; });
+        }
+        function render(focusIdx) {
+          var list = visible();
+          body.innerHTML = list.slice(0, shown).map(function (a, i) {
+            var open = i === openIdx;
+            var cost = a.cost_usdc != null ? Number(a.cost_usdc).toFixed(2) + " USDC" : "";
+            var side = "";
+            if (a.receipt_id) side = '<span class="entry-hash">' + esc(truncHash(a.receipt_id)) + "</span>";
+            else if (a.status === "failed" && a.http_status != null) side = '<span class="entry-hash">HTTP ' + esc(a.http_status) + "</span>";
+            else if (a.status === "fallback") side = '<span class="entry-hash">no receipt</span>';
+            var dot = a.status === "success" ? "ok" : a.status === "failed" ? "bad" : "";
+            var html = '<li class="entry' + (open ? " open" : "") + '">'
+              + '<button type="button" class="entry-head" data-i="' + i + '" aria-expanded="' + (open ? "true" : "false") + '" aria-controls="attempts-detail-' + i + '">'
+              + '<span class="entry-dot ' + dot + '" aria-hidden="true"></span>'
+              + '<span class="entry-main"><span class="entry-title">' + esc(a.miner_name || "") + " · " + esc(shortWhat(a)) + "</span>"
+              + '<span class="entry-sub">' + esc(hostname(a.target)) + " · " + esc(humanDate(a.date)) + (cost ? " · " + esc(cost) : "") + "</span></span>"
+              + '<span class="entry-side"><span class="entry-tag">' + esc(intentTag(a.intent)) + "</span>" + side + "</span>"
+              + '<span class="entry-chev" aria-hidden="true">›</span></button>';
+            if (open) {
+              html += '<div class="entry-detail" id="attempts-detail-' + i + '" role="region" aria-label="Attempt details"><div class="d-panel">' + detail(a) + "</div></div>";
+            }
+            return html + "</li>";
           }).join("");
-          count.textContent = "Showing " + Math.min(shown, attempts.length) + " of " + attempts.length;
-          more.style.display = shown < attempts.length ? "" : "none";
+          body.querySelectorAll(".entry-head").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              var i = Number(btn.getAttribute("data-i"));
+              openIdx = openIdx === i ? -1 : i;
+              render(i);
+            });
+          });
+          wireCopy(body);
+          if (focusIdx != null && focusIdx >= 0) {
+            var b = body.querySelector('.entry-head[data-i="' + focusIdx + '"]');
+            if (b) b.focus();
+          }
+          none.style.display = list.length ? "none" : "block";
+          count.textContent = "Showing " + Math.min(shown, list.length) + " of " + list.length;
+          more.style.display = shown < list.length ? "" : "none";
           pager.style.display = "flex";
         }
+        filtersEl.querySelectorAll(".fchip").forEach(function (chip) {
+          chip.addEventListener("click", function () {
+            filter = chip.getAttribute("data-filter");
+            filtersEl.querySelectorAll(".fchip").forEach(function (c) {
+              c.setAttribute("aria-pressed", c === chip ? "true" : "false");
+            });
+            shown = PAGE;
+            openIdx = -1;
+            render();
+          });
+        });
         more.addEventListener("click", function () { shown += PAGE; render(); });
         render();
       })
