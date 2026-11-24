@@ -41,11 +41,13 @@ class TestMonitor(unittest.TestCase):
 
     def test_compliance_fields_default_target_when_none_supplied(self):
         # The engine's canonical SLA input schema sends no target, so the
-        # mission default 99.9 is applied and disclosed, never left null.
+        # mission default 99.9 is applied, never left null. The response
+        # carries only the canonical fields: an extra sla_target_note key
+        # broke the engine's strict adapter (upstream 500s), so it is gone.
         r = UptimeResult("https://x", True, 200, 120, None, "up")
         f = sla_compliance_fields(r, sla_verdict(r, max_latency_ms=1000))
         self.assertEqual(f["sla_target_pct"], 99.9)
-        self.assertEqual(f["sla_target_note"], "default 99.9 applied (no target supplied)")
+        self.assertNotIn("sla_target_note", f)
         self.assertTrue(f["compliant"])  # 100.0 >= 99.9
 
     def test_compliance_fields_down(self):
@@ -59,7 +61,7 @@ class TestMonitor(unittest.TestCase):
         r = UptimeResult("https://x", True, 200, 120, None, "up")
         f = sla_compliance_fields(r, sla_verdict(r, max_latency_ms=1000), sla_target_pct=99.9)
         self.assertEqual(f["sla_target_pct"], 99.9)
-        self.assertNotIn("sla_target_note", f)  # no note when a target was supplied
+        self.assertNotIn("sla_target_note", f)  # response never carries the note key
         self.assertTrue(f["compliant"])  # 100.0 >= 99.9 and latency within SLA
 
     def test_compliance_fields_latency_breach_still_noncompliant(self):
