@@ -38,18 +38,28 @@ class TestMonitor(unittest.TestCase):
         self.assertEqual(f["uptime_pct"], 100.0)
         self.assertTrue(f["compliant"])
         self.assertEqual(f["period"], "instant (single live check)")
-        self.assertNotIn("sla_target_pct", f)  # never invented when not supplied
+
+    def test_compliance_fields_default_target_when_none_supplied(self):
+        # The engine's canonical SLA input schema sends no target, so the
+        # mission default 99.9 is applied and disclosed, never left null.
+        r = UptimeResult("https://x", True, 200, 120, None, "up")
+        f = sla_compliance_fields(r, sla_verdict(r, max_latency_ms=1000))
+        self.assertEqual(f["sla_target_pct"], 99.9)
+        self.assertEqual(f["sla_target_note"], "default 99.9 applied (no target supplied)")
+        self.assertTrue(f["compliant"])  # 100.0 >= 99.9
 
     def test_compliance_fields_down(self):
         r = UptimeResult("https://x", False, None, 10, "DNS", "down")
         f = sla_compliance_fields(r, sla_verdict(r))
         self.assertEqual(f["uptime_pct"], 0.0)
         self.assertFalse(f["compliant"])
+        self.assertEqual(f["sla_target_pct"], 99.9)  # default applied, not null
 
     def test_compliance_fields_target_echoed_and_applied(self):
         r = UptimeResult("https://x", True, 200, 120, None, "up")
         f = sla_compliance_fields(r, sla_verdict(r, max_latency_ms=1000), sla_target_pct=99.9)
         self.assertEqual(f["sla_target_pct"], 99.9)
+        self.assertNotIn("sla_target_note", f)  # no note when a target was supplied
         self.assertTrue(f["compliant"])  # 100.0 >= 99.9 and latency within SLA
 
     def test_compliance_fields_latency_breach_still_noncompliant(self):
