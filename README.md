@@ -83,6 +83,29 @@ Local demo is *not* a Telegraph purchase and is never claimed as one.
 6. Record the 2–5 min demo: real input → breach → claim with receipt + cost line.
 7. Submit through the H2 website by **1 Dec 2026, 23:59 UTC**.
 
+## Specialist vs frontier model
+On 24 Nov 2026 the same question was put to the engine three ways:
+check the uptime of `https://this-site-does-not-exist-12345.com`,
+intent `SERVER_UPTIME_MONITOR_GENERAL`.
+
+- **General model (auto-routed fallback):** the routed ask reached no
+  miner, so the engine fell back to a general model. It answered from
+  the domain name alone, reasoning that the name looked unlikely to
+  resolve. It made no measurement and issued no receipt. Cost $0.
+  ([evidence](examples/live/routed-fallback-frontier-model.json))
+- **DownProof miner (targeted):** probed the URL live and measured it:
+  DOWN, 0% uptime, SLA breached. Paid from escrow, receipt
+  `0x4f765ce4...`. ([evidence](examples/live/purchase-1-breach.json))
+- **ChainSight (targeted, independent miner):** probed the same URL
+  independently and confirmed DOWN, with its own escrow receipt
+  `0x8c2d0bcf...`. ([evidence](examples/live/purchase-3-crosscheck.json))
+
+The routed fallback happened because the intent is registered but not
+yet active for routing, so no miner could take the routed ask. Until
+routing activates for this intent, DownProof buys from known miners by
+ID, which is also how it cross-checks its own miner's verdicts against
+an independent provider.
+
 ## Failure cases judges can test
 - Down/unreachable host → breach + claim (try `https://nonexistent.invalid`)
 - Invalid URL scheme → clean DOWN verdict, no crash
