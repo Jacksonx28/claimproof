@@ -635,9 +635,55 @@
   .attach-list { margin: 10px 0 0; padding-left: 20px; }
   .attach-list li { margin: 6px 0; }
   .loading-note { color: var(--muted); }
+  /* The purchase target URL rides inside the intent cell but is only
+     shown in the mobile stacked layout, where it gets its own line. */
+  .row-url { display: none; }
+  /* Pagination: a quiet count line and a Show more button under each table. */
+  .pager { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 16px; }
+  .pager-count { font-family: var(--mono); font-size: .85rem; color: var(--muted); }
   @media (max-width: 760px) {
     .cards, .steps, .totals { grid-template-columns: 1fr !important; }
     .page-hero { padding: 40px 0 6px; }
+    /* Ledger tables become stacked blocks on a phone: no sideways glide.
+       The header row goes away and each row wraps into lines, with the
+       long hashes given room to wrap inside the screen instead. */
+    .table-wrap { overflow-x: visible; }
+    table.ledger { min-width: 0; }
+    table.ledger thead { display: none; }
+    table.ledger tbody tr {
+      display: flex; flex-wrap: wrap; align-items: baseline;
+      gap: 3px 12px; padding: 16px 0; border-top: 1px solid var(--border);
+    }
+    table.ledger tbody tr:first-child { border-top: 0; padding-top: 6px; }
+    table.ledger td { border-top: 0; padding: 0; min-width: 0; }
+    /* Purchases: miner and outcome, URL and intent, cost and date, receipt. */
+    #ledger-wrap td:nth-child(3) { order: 1; font-weight: 600; font-size: 1rem; }
+    #ledger-wrap td:nth-child(6) { order: 2; margin-left: auto; text-align: right; font-weight: 600; font-size: .9rem; }
+    #ledger-wrap td:nth-child(2) {
+      order: 3; flex: 1 1 100%; margin-top: 4px;
+      display: flex; flex-direction: column; gap: 2px; overflow-wrap: anywhere;
+    }
+    #ledger-wrap .row-url {
+      display: block; order: -1;
+      font-family: var(--mono); font-size: .85rem; color: var(--ink); word-break: break-all;
+    }
+    #ledger-wrap td:nth-child(4) { order: 4; font-variant-numeric: tabular-nums; }
+    #ledger-wrap td:nth-child(1) { order: 5; color: var(--muted); font-family: var(--mono); font-size: .82rem; }
+    #ledger-wrap td:nth-child(5) {
+      order: 6; flex: 1 1 100%; margin-top: 8px;
+      font-size: .76rem; line-height: 1.55; word-break: break-all;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 10px;
+    }
+    /* Attempts: miner and status chip first, then target, intent, time
+       and cost, with the error or note wrapped underneath. */
+    #attempts-wrap td:nth-child(3) { order: 1; font-weight: 600; font-size: 1rem; }
+    #attempts-wrap td:nth-child(5) { order: 2; margin-left: auto; }
+    #attempts-wrap td:nth-child(4) { order: 3; flex: 1 1 100%; margin-top: 4px; word-break: break-all; }
+    #attempts-wrap td:nth-child(2) { order: 4; flex: 1 1 100%; overflow-wrap: anywhere; }
+    #attempts-wrap td:nth-child(1) { order: 5; color: var(--muted); font-size: .82rem; }
+    #attempts-wrap td:nth-child(6) { order: 6; font-variant-numeric: tabular-nums; }
+    #attempts-wrap td:nth-child(7) { order: 7; flex: 1 1 100%; margin-top: 4px; overflow-wrap: anywhere; }
   }
 </style>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='10' y='8' width='8' height='48' rx='4' fill='%23FF4D00'/%3E%3Crect x='22' y='8' width='8' height='45' rx='4' fill='%23101418'/%3E%3Crect x='34' y='8' width='8' height='37' rx='4' fill='%23101418'/%3E%3Crect x='46' y='8' width='8' height='25' rx='4' fill='%23101418'/%3E%3C/svg%3E">
@@ -746,6 +792,10 @@
         <tbody id="ledger-body"></tbody>
       </table>
     </div>
+    <div class="pager" id="ledger-pager" style="display:none">
+      <span class="pager-count" id="ledger-count"></span>
+      <button class="secondary" id="ledger-more" type="button">Show more</button>
+    </div>
     <div class="empty-state reveal" id="ledger-empty" style="display:none">No engine purchases yet. The first live purchase runs on 24 Nov 2026 and its receipt will appear here.</div>
   </section>
 
@@ -760,6 +810,10 @@
         <thead><tr><th>Time (UTC)</th><th>Intent</th><th>Miner</th><th>Target</th><th>Status</th><th>Cost</th><th>Error / note</th></tr></thead>
         <tbody id="attempts-body"></tbody>
       </table>
+    </div>
+    <div class="pager" id="attempts-pager" style="display:none">
+      <span class="pager-count" id="attempts-count"></span>
+      <button class="secondary" id="attempts-more" type="button">Show more</button>
     </div>
     <div class="empty-state reveal" id="attempts-empty" style="display:none">No engine attempts logged yet.</div>
   </section>
@@ -852,11 +906,27 @@
         var empty = document.getElementById("ledger-empty");
         if (!purchases.length) { wrap.style.display = "none"; empty.style.display = "block"; return; }
         empty.style.display = "none";
-        document.getElementById("ledger-body").innerHTML = purchases.map(function (p) {
-          return "<tr><td>" + esc(p.date || "") + "</td><td class='mono'>" + esc(p.intent || "") + "</td><td>"
-            + esc(p.miner || "") + "</td><td>" + (p.cost_usdc != null ? Number(p.cost_usdc).toFixed(2) + " USDC" : "")
-            + "</td><td class='mono'>" + esc(p.receipt_id || p.signal_id || "") + "</td><td>" + esc(p.outcome || "") + "</td></tr>";
-        }).join("");
+        // Paginated in 10s, in the order the ledger stores them. Totals
+        // above always cover every purchase, not just the ones on screen.
+        var PAGE = 10;
+        var shown = PAGE;
+        var body = document.getElementById("ledger-body");
+        var pager = document.getElementById("ledger-pager");
+        var count = document.getElementById("ledger-count");
+        var more = document.getElementById("ledger-more");
+        function render() {
+          body.innerHTML = purchases.slice(0, shown).map(function (p) {
+            return "<tr><td>" + esc(p.date || "") + "</td><td class='mono'>" + esc(p.intent || "")
+              + '<span class="row-url">' + esc(p.url || "") + "</span></td><td>"
+              + esc(p.miner || "") + "</td><td>" + (p.cost_usdc != null ? Number(p.cost_usdc).toFixed(2) + " USDC" : "")
+              + "</td><td class='mono'>" + esc(p.receipt_id || p.signal_id || "") + "</td><td>" + esc(p.outcome || "") + "</td></tr>";
+          }).join("");
+          count.textContent = "Showing " + Math.min(shown, purchases.length) + " of " + purchases.length;
+          more.style.display = shown < purchases.length ? "" : "none";
+          pager.style.display = "flex";
+        }
+        more.addEventListener("click", function () { shown += PAGE; render(); });
+        render();
       })
       .catch(function () {
         document.getElementById("miner-identity").innerHTML = '<p class="loading-note">The ledger could not be loaded just now. Try again in a moment.</p>';
@@ -891,17 +961,32 @@
         var empty = document.getElementById("attempts-empty");
         if (!attempts.length) { wrap.style.display = "none"; empty.style.display = "block"; return; }
         empty.style.display = "none";
-        document.getElementById("attempts-body").innerHTML = attempts.map(function (a) {
-          var detail = "";
-          if (a.error) detail += '<span class="mono">' + esc(a.error) + "</span>";
-          if (a.note) detail += '<span class="attempt-note">' + esc(a.note) + "</span>";
-          if (a.receipt_id) detail += '<span class="attempt-note mono">Receipt: ' + esc(a.receipt_id) + "</span>";
-          return "<tr><td class='mono'>" + esc(a.date || "") + "</td><td class='mono'>" + esc(a.intent || "") + "</td><td>"
-            + esc(a.miner_name || "") + "</td><td class='mono'>" + esc(a.target || "") + "</td><td>"
-            + (CHIP[a.status] || esc(a.status || "")) + "</td><td>"
-            + (a.cost_usdc != null ? Number(a.cost_usdc).toFixed(2) + " USDC" : "")
-            + "</td><td>" + detail + "</td></tr>";
-        }).join("");
+        // Paginated in 10s, in the order the log stores them. The summary
+        // line above always counts every attempt, not just the ones shown.
+        var PAGE = 10;
+        var shown = PAGE;
+        var body = document.getElementById("attempts-body");
+        var pager = document.getElementById("attempts-pager");
+        var count = document.getElementById("attempts-count");
+        var more = document.getElementById("attempts-more");
+        function render() {
+          body.innerHTML = attempts.slice(0, shown).map(function (a) {
+            var detail = "";
+            if (a.error) detail += '<span class="mono">' + esc(a.error) + "</span>";
+            if (a.note) detail += '<span class="attempt-note">' + esc(a.note) + "</span>";
+            if (a.receipt_id) detail += '<span class="attempt-note mono">Receipt: ' + esc(a.receipt_id) + "</span>";
+            return "<tr><td class='mono'>" + esc(a.date || "") + "</td><td class='mono'>" + esc(a.intent || "") + "</td><td>"
+              + esc(a.miner_name || "") + "</td><td class='mono'>" + esc(a.target || "") + "</td><td>"
+              + (CHIP[a.status] || esc(a.status || "")) + "</td><td>"
+              + (a.cost_usdc != null ? Number(a.cost_usdc).toFixed(2) + " USDC" : "")
+              + "</td><td>" + detail + "</td></tr>";
+          }).join("");
+          count.textContent = "Showing " + Math.min(shown, attempts.length) + " of " + attempts.length;
+          more.style.display = shown < attempts.length ? "" : "none";
+          pager.style.display = "flex";
+        }
+        more.addEventListener("click", function () { shown += PAGE; render(); });
+        render();
       })
       .catch(function () {
         document.getElementById("attempts-summary").textContent = "The attempts log could not be loaded just now. Try again in a moment.";
