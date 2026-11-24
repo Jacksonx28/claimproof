@@ -80,8 +80,8 @@ def sla_compliance_fields(result: UptimeResult, verdict: dict, sla_target_pct: f
     uptime_pct is the single-sample availability (100.0 up, 0.0 down) and period
     says so. The engine's canonical SLA input schema (v4) is {service, period}
     and sends no target, so when the caller supplied none we apply the
-    SLA_COMPLIANCE mission default of 99.9 and say so in sla_target_note —
-    the field is never null and the default is never silent. compliant is the
+    SLA_COMPLIANCE mission default of 99.9 — the field is never null.
+    compliant is the
     sla_verdict outcome, additionally requiring uptime_pct >= sla_target_pct.
     (SERVER_UPTIME_MONITOR_GENERAL publishes no response format at all —
     its intent record has request=null and response=null — so nothing to add
@@ -92,13 +92,10 @@ def sla_compliance_fields(result: UptimeResult, verdict: dict, sla_target_pct: f
     if target_defaulted:
         sla_target_pct = DEFAULT_SLA_TARGET_PCT
     compliant = not verdict["breached"] and uptime_pct >= sla_target_pct
-    fields = {
+    return {
         "service": result.url,
         "period": "instant (single live check)",
         "uptime_pct": uptime_pct,
         "sla_target_pct": sla_target_pct,
         "compliant": compliant,
     }
-    if target_defaulted:
-        fields["sla_target_note"] = "default 99.9 applied (no target supplied)"
-    return fields
