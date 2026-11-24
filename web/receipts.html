@@ -627,6 +627,11 @@
   .watch-item .u { font-family: var(--mono); font-size: .92rem; font-weight: 600; color: var(--ink); word-break: break-all; }
   .watch-item .meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 5px; }
   .chip { font-family: var(--mono); font-size: .72rem; padding: 4px 9px; border: 1px solid var(--border); border-radius: 999px; color: var(--muted); background: var(--surface-2); white-space: nowrap; }
+  .chip.status-ok { color: var(--ok); background: var(--ok-bg); border-color: var(--ok-border); }
+  .chip.status-bad { color: var(--bad); background: var(--bad-bg); border-color: var(--bad-border); }
+  .chip.status-muted { color: var(--muted); background: var(--surface-2); border-color: var(--border); }
+  .attempts-summary { font-family: var(--mono); font-size: .85rem; color: var(--muted); margin: 0 0 6px; }
+  .attempt-note { display: block; color: var(--muted); font-size: .88rem; margin-top: 3px; }
   .attach-list { margin: 10px 0 0; padding-left: 20px; }
   .attach-list li { margin: 6px 0; }
   .loading-note { color: var(--muted); }
@@ -743,6 +748,21 @@
     </div>
     <div class="empty-state reveal" id="ledger-empty" style="display:none">No engine purchases yet. The first live purchase runs on 24 Nov 2026 and its receipt will appear here.</div>
   </section>
+
+  <section class="section">
+    <div class="section-head reveal">
+      <h2>All attempts</h2>
+      <p>Every engine ask, not just the ones that ended in a purchase. Bounces and server errors are logged with the error the engine returned, so a bug can be seen here and handled, not hidden.</p>
+    </div>
+    <p class="attempts-summary reveal" id="attempts-summary">Loading the attempts log&hellip;</p>
+    <div class="table-wrap reveal" id="attempts-wrap">
+      <table class="ledger">
+        <thead><tr><th>Time (UTC)</th><th>Intent</th><th>Miner</th><th>Target</th><th>Status</th><th>Cost</th><th>Error / note</th></tr></thead>
+        <tbody id="attempts-body"></tbody>
+      </table>
+    </div>
+    <div class="empty-state reveal" id="attempts-empty" style="display:none">No engine attempts logged yet.</div>
+  </section>
   <footer>
     <div class="foot-row">
       <span class="foot-brand">
@@ -840,6 +860,51 @@
       })
       .catch(function () {
         document.getElementById("miner-identity").innerHTML = '<p class="loading-note">The ledger could not be loaded just now. Try again in a moment.</p>';
+      });
+  })();
+</script>
+<script>
+  // Attempts log: renders /attempts.json below the purchases ledger.
+  // Successes, failures and fallbacks are all shown; nothing is filtered out.
+  (function () {
+    "use strict";
+    function esc(s) {
+      return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      });
+    }
+    var CHIP = {
+      success: '<span class="chip status-ok">success</span>',
+      failed: '<span class="chip status-bad">failed</span>',
+      fallback: '<span class="chip status-muted">fallback</span>'
+    };
+    fetch("/attempts.json")
+      .then(function (r) { if (!r.ok) throw new Error("bad status"); return r.json(); })
+      .then(function (data) {
+        var attempts = Array.isArray(data.attempts) ? data.attempts : [];
+        var ok = attempts.filter(function (a) { return a.status === "success"; }).length;
+        var failed = attempts.filter(function (a) { return a.status === "failed"; }).length;
+        var fb = attempts.filter(function (a) { return a.status === "fallback"; }).length;
+        document.getElementById("attempts-summary").textContent =
+          attempts.length + " attempts: " + ok + " succeeded, " + failed + " failed, " + fb + " fallback";
+        var wrap = document.getElementById("attempts-wrap");
+        var empty = document.getElementById("attempts-empty");
+        if (!attempts.length) { wrap.style.display = "none"; empty.style.display = "block"; return; }
+        empty.style.display = "none";
+        document.getElementById("attempts-body").innerHTML = attempts.map(function (a) {
+          var detail = "";
+          if (a.error) detail += '<span class="mono">' + esc(a.error) + "</span>";
+          if (a.note) detail += '<span class="attempt-note">' + esc(a.note) + "</span>";
+          if (a.receipt_id) detail += '<span class="attempt-note mono">Receipt: ' + esc(a.receipt_id) + "</span>";
+          return "<tr><td class='mono'>" + esc(a.date || "") + "</td><td class='mono'>" + esc(a.intent || "") + "</td><td>"
+            + esc(a.miner_name || "") + "</td><td class='mono'>" + esc(a.target || "") + "</td><td>"
+            + (CHIP[a.status] || esc(a.status || "")) + "</td><td>"
+            + (a.cost_usdc != null ? Number(a.cost_usdc).toFixed(2) + " USDC" : "")
+            + "</td><td>" + detail + "</td></tr>";
+        }).join("");
+      })
+      .catch(function () {
+        document.getElementById("attempts-summary").textContent = "The attempts log could not be loaded just now. Try again in a moment.";
       });
   })();
 </script>
