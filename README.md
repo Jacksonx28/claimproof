@@ -106,6 +106,18 @@ routing activates for this intent, DownProof buys from known miners by
 ID, which is also how it cross-checks its own miner's verdicts against
 an independent provider.
 
+## The attempts log
+Receipts only tell half the story, so DownProof also keeps an
+attempts log (`attempts.json`, rendered on the receipts page under
+"All attempts"). Every engine ask is recorded: the successes with
+their receipt IDs, and the failures with the error the engine
+returned, including the routed fallback above, the two 400 bounces
+while the canonical SLA schema was being discovered, and the engine
+500s that exposed a response-shape bug in our own miner. The client
+appends to the log automatically on every live ask. A product that
+sells proof should show its failures too, not just the purchases
+that worked.
+
 ## Failure cases judges can test
 - Down/unreachable host → breach + claim (try `https://nonexistent.invalid`)
 - Invalid URL scheme → clean DOWN verdict, no crash
