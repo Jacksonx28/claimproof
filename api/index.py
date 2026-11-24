@@ -11,7 +11,7 @@ Plus the product surface around the miner:
 
 GET  /, /providers, /guide, /receipts, /watch   (web/*.html pages)
 GET  /og.png                                    (web/og.png share image)
-GET  /receipts.json, /watchlist.json            (repo-root JSON files)
+GET  /receipts.json, /attempts.json, /watchlist.json  (repo-root JSON files)
 POST /api/check       JSON in/out version of the full DownProof flow:
                       {url, provider, bill, uptime, checks} ->
                       {ok, verdict, checks, owed, letter, honesty_record}
@@ -53,6 +53,7 @@ _PAGES = {
 }
 _JSON_FILES = {
     "/receipts.json": "receipts.json",
+    "/attempts.json": "attempts.json",
     "/watchlist.json": "watchlist.json",
 }
 _web_cache: dict[str, str | None] = {}
