@@ -1,0 +1,50 @@
+{
+  "status": 200,
+  "body": {
+    "result": {
+      "miner_id": "23112026",
+      "miner_name": "downproof-uptime",
+      "endpoint": "/query",
+      "result": {
+        "service": "https://api.github.com",
+        "uptime_pct": 100,
+        "sla_target_pct": 99.9,
+        "compliant": true,
+        "period": "instant (single live check)"
+      },
+      "result_shape": "intent",
+      "format_version": 4,
+      "field_status": {
+        "service": "ok",
+        "uptime_pct": "ok",
+        "sla_target_pct": "ok",
+        "compliant": "ok",
+        "period": "ok"
+      },
+      "input": {
+        "service": "https://api.github.com",
+        "period": "7 days"
+      },
+      "input_schema_version": 4,
+      "cost_usd": 0.01,
+      "duration_ms": 971,
+      "timestamp": "2026-11-25T13:07:39.502468544Z",
+      "reasoning": "Intent: miner downproof given by the caller\nMiner: The user wants to check SLA compliance for the service 'https://api.github.com' over a '7 days' period. The downproof-uptime miner's '/query' endpoint serves the SLA_COMPLIANCE_GENERAL intent and accepts 'url' and 'period' as parameters. The provided parameters directly map to the required fields for this endpoint and intent.",
+      "intent": "SLA_COMPLIANCE_GENERAL",
+      "intent_version": 1,
+      "signal_hash": "0xafb6020976f128b89f247d5ff8bfa3fd9fcab8ed8cb2dc72ba4dd7106e5b0ace"
+    },
+    "receipt": {
+      "receipt_hash": "0x9cfd88191a80c93bcc3ea3c71198e398891e019a77d410fa42b21bd40bdf2f08",
+      "rail": "escrow",
+      "payer": "0x33a9dfdf776014539b02265d8bb7dd97a8784a39",
+      "miner": "6182",
+      "intent": "SLA_COMPLIANCE_GENERAL",
+      "amount_uusdc": "10000",
+      "epoch_id": 55,
+      "settlement": "epoch",
+      "chain": "telegraph",
+      "timestamp": 1795612061
+    }
+  }
+}
