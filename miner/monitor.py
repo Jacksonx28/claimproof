@@ -6,7 +6,9 @@ We fetch the URL, measure latency, and return structured fields only.
 """
 from __future__ import annotations
 
+import socket
 import time
+import urllib.parse
 import urllib.request
 import urllib.error
 from dataclasses import dataclass, asdict
@@ -29,12 +31,65 @@ class UptimeResult:
         return asdict(self)
 
 
+# Vercel's sandbox reports an unresolvable host to urllib as
+# "urlopen error [Errno 16] Device or resource busy" (seen live on
+# 2026-11-26: every dead address returned it in 10-20ms, while
+# google.com answered normally). That string is genuine but reads as
+# a broken checker in a claim letter, so DNS failures are reported
+# in plain language instead. Only the `error` text changes: is_up,
+# status_code, latency, verdict and the SLA compliance fields are
+# untouched, and no new response key is added.
+_DNS_ERRNOS = {-2, 8, 16, 11001, 11002, 11004}
+
+
+def _plain_error(exc: BaseException, host: str | None) -> str:
+    """Turn a fetch failure into the plain-language `error` string.
+
+    DNS failures (however the platform surfaces them: gaierror, an
+    OSError errno, or the Errno 16 text Vercel produces) become
+    "host could not be resolved: <host>". Timeouts and refused
+    connections get their own plain line. Anything else keeps the
+    original message, truncated as before.
+    """
+    reason = getattr(exc, "reason", exc)
+    if isinstance(reason, socket.gaierror):
+        return f"host could not be resolved: {host}" if host else "host could not be resolved"
+    if isinstance(reason, OSError):
+        if reason.errno in _DNS_ERRNOS or "Device or resource busy" in str(reason):
+            return f"host could not be resolved: {host}" if host else "host could not be resolved"
+        if isinstance(reason, (TimeoutError, socket.timeout)):
+            return "connection timed out"
+        if isinstance(reason, ConnectionRefusedError):
+            return "connection refused"
+    if isinstance(exc, (TimeoutError, socket.timeout)):
+        return "connection timed out"
+    if isinstance(exc, ConnectionRefusedError):
+        return "connection refused"
+    text = str(exc)[:200]
+    if "Device or resource busy" in text or "Name or service not known" in text:
+        return f"host could not be resolved: {host}" if host else "host could not be resolved"
+    return text
+
+
 def check_url(url: str, timeout_s: float = 5.0) -> UptimeResult:
     if not url.startswith(("http://", "https://")):
         return UptimeResult(url, False, None, 0, "url must start with http:// or https://",
                              f"{url} is DOWN: invalid URL scheme")
-    req = urllib.request.Request(url, method="GET", headers={"User-Agent": "DownProof-Miner/0.1"})
+    parsed = urllib.parse.urlparse(url)
+    host = parsed.hostname
     start = time.perf_counter()
+    if host:
+        # Resolve first, so a dead host is reported in plain language
+        # instead of whatever the platform's fetch layer says about it.
+        try:
+            socket.getaddrinfo(host, parsed.port or (443 if parsed.scheme == "https" else 80),
+                               proto=socket.IPPROTO_TCP)
+        except (socket.gaierror, OSError):
+            latency = int((time.perf_counter() - start) * 1000)
+            return UptimeResult(url, False, None, latency,
+                                f"host could not be resolved: {host}",
+                                f"{url} is DOWN: host could not be resolved after {latency}ms")
+    req = urllib.request.Request(url, method="GET", headers={"User-Agent": "DownProof-Miner/0.1"})
     try:
         with urllib.request.urlopen(req, timeout=timeout_s) as resp:
             resp.read(512)  # prove the body actually flows, don't trust headers alone
@@ -48,7 +103,7 @@ def check_url(url: str, timeout_s: float = 5.0) -> UptimeResult:
                             f"{url} is DOWN: HTTP {e.code} in {latency}ms")
     except Exception as e:  # DNS, TLS, timeout, connection refused
         latency = int((time.perf_counter() - start) * 1000)
-        return UptimeResult(url, False, None, latency, str(e)[:200],
+        return UptimeResult(url, False, None, latency, _plain_error(e, host),
                             f"{url} is DOWN: {type(e).__name__} after {latency}ms")
 
 
