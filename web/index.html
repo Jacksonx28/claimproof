@@ -670,6 +670,7 @@
             <option value="digitalocean-spaces">DigitalOcean Spaces</option>
             <option value="other">Other / not listed</option>
           </select>
+          <p class="hint" id="provider-hint"></p>
         </div>
         <div class="field">
           <label for="checks">Number of checks</label>
@@ -1025,6 +1026,45 @@ $("download").addEventListener("click", () => {
   a.click();
   URL.revokeObjectURL(a.href);
 });
+</script>
+<script>
+  // Provider auto-detection: when a service URL is pasted, ask the miner
+  // which provider the link points at and pre-fill the dropdown. It is a
+  // suggestion, never a lock: the user can change it, and once they pick
+  // a provider themselves their choice is never overridden.
+  (function () {
+    var urlInput = document.getElementById("url");
+    var providerSel = document.getElementById("provider");
+    var hint = document.getElementById("provider-hint");
+    if (!urlInput || !providerSel || !hint) return;
+    var userPicked = false;
+    var lastChecked = "";
+    providerSel.addEventListener("change", function () { userPicked = true; });
+    async function detect() {
+      var raw = urlInput.value.trim();
+      if (!raw || userPicked || raw === lastChecked) return;
+      lastChecked = raw;
+      var url = /^https?:\/\//i.test(raw) ? raw : "https://" + raw;
+      try {
+        var resp = await fetch("/api/detect", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({url: url})
+        });
+        var data = await resp.json();
+        if (userPicked) return;
+        if (data && data.detected) {
+          providerSel.value = data.detected.provider;
+          hint.textContent = "Detected: " + data.detected.provider_name + ", from "
+            + data.detected.source + ". Change it if that is wrong; the provider on your bill is the one that counts.";
+        } else {
+          hint.textContent = "Could not detect the provider from that link. Pick the one on your bill.";
+        }
+      } catch (e) { /* detection is a convenience; stay silent on failure */ }
+    }
+    urlInput.addEventListener("blur", detect);
+    urlInput.addEventListener("change", detect);
+  })();
 </script>
 <script>
   // Theme toggle: flip data-theme on <html> and persist the choice.
