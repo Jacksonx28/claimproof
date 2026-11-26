@@ -15,6 +15,10 @@ GET  /receipts.json, /attempts.json, /watchlist.json  (repo-root JSON files)
 POST /api/check       JSON in/out version of the full DownProof flow:
                       {url, provider, bill, uptime, checks} ->
                       {ok, verdict, checks, owed, letter, honesty_record}
+POST /api/detect      {url} -> {ok, detected} : best-guess provider for a
+                      service URL (app/provider_detect.py), so the checker
+                      form can pre-fill the provider dropdown. Also as
+                      GET /api/detect?url=... for quick manual tests.
 
 All check logic is reused from miner/monitor.py, the YAML is reused
 from miner/server.py, and the credit math from app/sla_credits.py:
@@ -26,6 +30,7 @@ import json
 import os
 import sys
 from datetime import datetime, timezone
+from urllib.parse import parse_qs
 
 # Make the repo root and the miner package importable regardless of the
 # working directory Vercel runs this function from.
@@ -40,6 +45,7 @@ for _p in (_ROOT, _MINER, _APP_DIR):
 from monitor import check_url, sla_verdict, sla_compliance_fields  # noqa: E402  (miner/monitor.py)
 import server as _miner_server  # noqa: E402  (miner/server.py, for the YAML)
 from sla_credits import claim_deadline, credit_for, normalise_provider  # noqa: E402  (app/sla_credits.py)
+from provider_detect import detect_from_url  # noqa: E402  (app/provider_detect.py)
 
 YAML = _miner_server.YAML
 
@@ -138,6 +144,22 @@ def _num(value) -> float | None:
         return float(value)
     except (TypeError, ValueError):
         return None
+
+
+def _api_detect(url: str):
+    """Best-guess provider for a service URL. Returns (status, dict).
+
+    Detection is a form convenience (see app/provider_detect.py): the
+    guess is returned with its source so the page can present it as a
+    changeable suggestion, never as a fact.
+    """
+    if not url:
+        return 400, {"ok": False, "error": "missing 'url'"}
+    found = detect_from_url(url, timeout_s=5.0)
+    if found is not None:
+        found = dict(found)
+        found["provider_name"] = _PROVIDER_NAMES.get(found["provider"])
+    return 200, {"ok": True, "detected": found}
 
 
 def _api_check(payload: dict):
@@ -285,10 +307,14 @@ def app(environ, start_response):
             })
         if path == "/telegraph.yaml":
             return _respond(start_response, 200, YAML, "text/yaml")
+        if path == "/api/detect":
+            qs = parse_qs(environ.get("QUERY_STRING", ""))
+            code, out = _api_detect((qs.get("url") or [""])[0].strip())
+            return _respond(start_response, code, out)
         return _respond(start_response, 404, {"error": "not found"})
 
     if method == "POST":
-        if path not in ("/query", "/api/check"):
+        if path not in ("/query", "/api/check", "/api/detect"):
             return _respond(start_response, 404, {"error": "not found"})
         try:
             length = int(environ.get("CONTENT_LENGTH") or 0)
@@ -301,6 +327,9 @@ def app(environ, start_response):
             return _respond(start_response, 400, {"error": "invalid JSON body"})
         if path == "/api/check":
             code, out = _api_check(payload)
+            return _respond(start_response, code, out)
+        if path == "/api/detect":
+            code, out = _api_detect(str(payload.get("url") or "").strip())
             return _respond(start_response, code, out)
         url = payload.get("url") or payload.get("service") or ""
         if not url:
