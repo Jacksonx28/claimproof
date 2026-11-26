@@ -1,6 +1,9 @@
 import os
+import socket
 import sys
 import unittest
+import urllib.error
+from unittest import mock
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "miner"))
 from monitor import check_url, sla_verdict, sla_compliance_fields, UptimeResult  # noqa: E402
@@ -16,6 +19,52 @@ class TestMonitor(unittest.TestCase):
         r = check_url("https://nonexistent.invalid", timeout_s=3)
         self.assertFalse(r.is_up)
         self.assertIsNotNone(r.error)
+
+    def test_unresolvable_host_reports_plain_language(self):
+        # The live Vercel behaviour (2026-11-26): every dead address
+        # came back "Device or resource busy". The pre-resolve must
+        # catch it before the fetch and say so plainly, and the
+        # claim-letter verdict must carry the plain text, not the
+        # platform string. Mocked: this sandbox's DNS answers for
+        # .invalid instead of failing, so a live probe cannot
+        # reproduce Vercel here.
+        with mock.patch("monitor.socket.getaddrinfo",
+                        side_effect=socket.gaierror(-2, "Name or service not known")), \
+             mock.patch("monitor.urllib.request.urlopen",
+                        side_effect=AssertionError("fetch must not run for an unresolvable host")):
+            r = check_url("https://nonexistent.invalid", timeout_s=3)
+        self.assertFalse(r.is_up)
+        self.assertEqual(r.error, "host could not be resolved: nonexistent.invalid")
+        self.assertIn("host could not be resolved", r.summary)
+        self.assertNotIn("Device or resource busy", r.error)
+        v = sla_verdict(r)
+        self.assertTrue(v["breached"])
+        self.assertIn("host could not be resolved: nonexistent.invalid", v["summary"])
+        self.assertNotIn("Device or resource busy", v["summary"])
+
+    def test_vercel_style_dns_error_is_normalised(self):
+        # Belt and braces: if the platform's fetch layer itself
+        # surfaces the Errno 16 string (URLError wrapping
+        # OSError(16, "Device or resource busy")), the error field
+        # is still normalised, even when the pre-resolve succeeded.
+        err = urllib.error.URLError(OSError(16, "Device or resource busy"))
+        with mock.patch("monitor.socket.getaddrinfo", return_value=[("x",)]), \
+             mock.patch("monitor.urllib.request.urlopen", side_effect=err):
+            r = check_url("https://dead.example", timeout_s=3)
+        self.assertFalse(r.is_up)
+        self.assertEqual(r.error, "host could not be resolved: dead.example")
+        self.assertNotIn("Device or resource busy", r.error)
+
+    def test_timeout_and_refused_stay_plain(self):
+        with mock.patch("monitor.socket.getaddrinfo", return_value=[("x",)]), \
+             mock.patch("monitor.urllib.request.urlopen", side_effect=socket.timeout("timed out")):
+            self.assertEqual(check_url("https://slow.example", timeout_s=3).error,
+                             "connection timed out")
+        with mock.patch("monitor.socket.getaddrinfo", return_value=[("x",)]), \
+             mock.patch("monitor.urllib.request.urlopen",
+                        side_effect=ConnectionRefusedError("refused")):
+            self.assertEqual(check_url("https://closed.example", timeout_s=3).error,
+                             "connection refused")
 
     def test_sla_breach_on_down(self):
         v = sla_verdict(UptimeResult("https://x", False, None, 10, "DNS", "down"))
