@@ -11,7 +11,9 @@ Plus the product surface around the miner:
 
 GET  /, /providers, /guide, /receipts, /watch   (web/*.html pages)
 GET  /og.png                                    (web/og.png share image)
+GET  /design.css, /design.js, /checker.js, /network.svg (web UI assets)
 GET  /receipts.json, /attempts.json, /watchlist.json  (repo-root JSON files)
+GET  /watch_results.json                        (dated direct-check results)
 POST /api/check       JSON in/out version of the full DownProof flow:
                       {url, provider, bill, uptime, checks} ->
                       {ok, verdict, checks, owed, letter, honesty_record}
@@ -61,6 +63,15 @@ _JSON_FILES = {
     "/receipts.json": "receipts.json",
     "/attempts.json": "attempts.json",
     "/watchlist.json": "watchlist.json",
+    "/watch_results.json": "watch_results.json",
+}
+# Only explicit public assets are served. Never map arbitrary request paths
+# onto the repository: it also contains source, test data and configuration.
+_WEB_ASSETS = {
+    "/design.css": ("design.css", "text/css; charset=utf-8"),
+    "/design.js": ("design.js", "text/javascript; charset=utf-8"),
+    "/checker.js": ("checker.js", "text/javascript; charset=utf-8"),
+    "/network.svg": ("network.svg", "image/svg+xml"),
 }
 _web_cache: dict[str, str | None] = {}
 _web_bytes_cache: dict[str, bytes | None] = {}
@@ -293,6 +304,12 @@ def app(environ, start_response):
             png = _web_bytes("og.png")
             if png is not None:
                 return _respond(start_response, 200, png, "image/png")
+            return _respond(start_response, 404, {"error": "not found"})
+        if path in _WEB_ASSETS:
+            filename, content_type = _WEB_ASSETS[path]
+            asset = _web_bytes(filename)
+            if asset is not None:
+                return _respond(start_response, 200, asset, content_type)
             return _respond(start_response, 404, {"error": "not found"})
         if path in _JSON_FILES:
             body = _root_file(_JSON_FILES[path])
