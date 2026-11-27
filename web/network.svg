@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="500" viewBox="0 0 1100 500" fill="none">
+  <title>DownProof verification observatory</title>
+  <desc>An illustrative verification miner suspended above orbital rings. Three satellite modules represent probe, policy, and evidence. Light pulses travel between them.</desc>
+  <defs>
+    <radialGradient id="ambient"><stop stop-color="#76d8c6" stop-opacity=".14"/><stop offset=".48" stop-color="#58a9b2" stop-opacity=".055"/><stop offset="1" stop-color="#58a9b2" stop-opacity="0"/></radialGradient>
+    <radialGradient id="ground"><stop stop-color="#070d12" stop-opacity=".8"/><stop offset="1" stop-color="#070d12" stop-opacity="0"/></radialGradient>
+    <linearGradient id="deck" x1="384" y1="277" x2="690" y2="368" gradientUnits="userSpaceOnUse"><stop stop-color="#334c58"/><stop offset=".42" stop-color="#14252e"/><stop offset="1" stop-color="#0a141d"/></linearGradient>
+    <linearGradient id="deckEdge" x1="383" y1="319" x2="718" y2="365" gradientUnits="userSpaceOnUse"><stop stop-color="#45616d"/><stop offset=".49" stop-color="#11242c"/><stop offset=".53" stop-color="#304c57"/><stop offset="1" stop-color="#0c1820"/></linearGradient>
+    <linearGradient id="silver" x1="432" y1="115" x2="665" y2="265" gradientUnits="userSpaceOnUse"><stop stop-color="#96bcc5"/><stop offset=".22" stop-color="#577987"/><stop offset=".52" stop-color="#263c49"/><stop offset=".78" stop-color="#7096a3"/><stop offset="1" stop-color="#304854"/></linearGradient>
+    <linearGradient id="glassLeft" x1="453" y1="171" x2="550" y2="335" gradientUnits="userSpaceOnUse"><stop stop-color="#6c97a5" stop-opacity=".62"/><stop offset=".45" stop-color="#244351" stop-opacity=".85"/><stop offset="1" stop-color="#0e242e" stop-opacity=".96"/></linearGradient>
+    <linearGradient id="glassRight" x1="550" y1="215" x2="647" y2="312" gradientUnits="userSpaceOnUse"><stop stop-color="#264b59" stop-opacity=".9"/><stop offset="1" stop-color="#101d27" stop-opacity=".97"/></linearGradient>
+    <linearGradient id="mint" x1="395" y1="290" x2="702" y2="365" gradientUnits="userSpaceOnUse"><stop stop-color="#518d8f"/><stop offset=".45" stop-color="#a5f5d5"/><stop offset="1" stop-color="#76c1d4"/></linearGradient>
+    <linearGradient id="cap" x1="465" y1="140" x2="615" y2="217" gradientUnits="userSpaceOnUse"><stop stop-color="#b7dbdf" stop-opacity=".54"/><stop offset=".42" stop-color="#597e8b" stop-opacity=".2"/><stop offset="1" stop-color="#4e8291" stop-opacity=".56"/></linearGradient>
+    <linearGradient id="nodeTop" x1="-38" y1="-20" x2="38" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#537582"/><stop offset=".4" stop-color="#294350"/><stop offset="1" stop-color="#11232f"/></linearGradient>
+    <linearGradient id="beam" x1="550" y1="215" x2="550" y2="345" gradientUnits="userSpaceOnUse"><stop stop-color="#a5f5d5" stop-opacity=".16"/><stop offset="1" stop-color="#a5f5d5" stop-opacity="0"/></linearGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="4"/></filter>
+    <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="1.8"/></filter>
+    <filter id="shadow" x="-40%" y="-40%" width="180%" height="200%"><feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#02070b" flood-opacity=".38"/></filter>
+    <pattern id="perforation" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".6" fill="#b2d2d7" opacity=".16"/></pattern>
+    <g id="satellite">
+      <ellipse cy="26" rx="49" ry="15" fill="#050b11" opacity=".2"/>
+      <path d="M-38-5 0-27 38-5v15L0 32-38 10Z" fill="#10232c" stroke="#537781" stroke-width=".8"/>
+      <path d="M-38-5 0-27 38-5 0 17Z" fill="url(#nodeTop)" stroke="#9bbac2" stroke-opacity=".5" stroke-width=".8"/>
+      <path d="M-38 7 0 29 38 7" stroke="#8ac6c4" stroke-opacity=".65"/>
+      <path d="M-29-5 0-22 29-5 0 12Z" fill="url(#perforation)"/>
+      <path d="M0 17v12" stroke="#8fb7bf" stroke-opacity=".5"/>
+    </g>
+  </defs>
+  <style>
+    .flow { stroke-dasharray: 3 97; stroke-linecap: round; animation: flow 5s linear infinite; }
+    .flow-b { animation-delay: -1.8s; animation-duration: 5.8s; }
+    .flow-c { animation-delay: -3.2s; animation-duration: 6.4s; }
+    .miner { animation: levitate 7s ease-in-out infinite; }
+    .pulse { animation: pulse 5s ease-in-out infinite; }
+    .scan { animation: scan 5.5s ease-in-out infinite; transform-origin: 550px 235px; }
+    @keyframes flow { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+    @keyframes levitate { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    @keyframes pulse { 0%,100% { opacity: .3; } 50% { opacity: .75; } }
+    @keyframes scan { 0%,100% { opacity: .15; transform: translateY(0); } 50% { opacity: .7; transform: translateY(48px); } }
+    @media (prefers-reduced-motion: reduce) { .flow,.miner,.pulse,.scan { animation: none; } .flow { stroke-dasharray: none; opacity: .45; } }
+  </style>
+  <!-- Perspective field: quiet orbital geometry sits beneath the evidence path. -->
+  <ellipse cx="550" cy="266" rx="474" ry="237" fill="url(#ambient)"/>
+  <ellipse cx="550" cy="365" rx="208" ry="60" fill="url(#ground)"/>
+  <g stroke="#6e98a8" stroke-width=".7">
+    <ellipse cx="550" cy="290" rx="425" ry="145" stroke-opacity=".12"/>
+    <ellipse cx="550" cy="290" rx="382" ry="128" stroke-opacity=".17"/>
+    <ellipse cx="550" cy="290" rx="337" ry="109" stroke-opacity=".25"/>
+    <ellipse cx="550" cy="290" rx="273" ry="86" stroke-opacity=".13"/>
+    <path d="M124 290h852M550 145v290" stroke-opacity=".1" stroke-dasharray="2 8"/>
+    <path d="m247 188 606 204m-606 0 606-204" stroke-opacity=".08"/>
+  </g>
+  <path d="M179 249c37-74 166-104 279-88M717 174c111 20 184 66 211 112M911 356c-79 62-263 97-424 73" stroke="#6da8ac" stroke-opacity=".35" stroke-width="1.2"/>
+  <g fill="#7dafb5" opacity=".6"><circle cx="171" cy="273" r="2"/><circle cx="533" cy="162" r="2"/><circle cx="932" cy="311" r="2"/><circle cx="487" cy="429" r="2"/></g>
+  <!-- Three curved connections are illustrative paths, not live traffic. -->
+  <g stroke="#82bebf" stroke-opacity=".3" stroke-width="1.25">
+    <path id="probePath" d="M215 253C299 253 324 305 419 308"/>
+    <path id="policyPath" d="M824 170C742 170 740 253 656 264"/>
+    <path id="evidencePath" d="M671 328C746 328 766 360 851 360"/>
+  </g>
+  <g stroke="#bafbe4" stroke-width="2.4">
+    <path class="flow" pathLength="100" d="M215 253C299 253 324 305 419 308"/>
+    <path class="flow flow-b" pathLength="100" d="M824 170C742 170 740 253 656 264"/>
+    <path class="flow flow-c" pathLength="100" d="M671 328C746 328 766 360 851 360"/>
+  </g>
+  <!-- The central pedestal is machined, layered, and grounded in perspective. -->
+  <path d="m384 311 166-96 168 96v16l-168 97-166-97Z" fill="url(#deckEdge)" stroke="#5c8390" stroke-opacity=".5"/>
+  <path d="m384 311 166-96 168 96-168 97Z" fill="url(#deck)" stroke="#91b8c3" stroke-opacity=".55"/>
+  <path d="m400 311 150-86 152 86-152 88Z" fill="url(#perforation)" stroke="#7ba4ae" stroke-opacity=".16"/>
+  <path d="m384 320 166 96 168-96" stroke="url(#mint)" stroke-width="1.5"/>
+  <path d="m384 320 166 96 168-96" stroke="#a5f5d5" stroke-width="6" opacity=".32" filter="url(#blur)" class="pulse"/>
+  <path d="M550 408v16" stroke="#8badb4" stroke-opacity=".4"/>
+  <path d="m420 309 130-75 131 75-131 76Z" stroke="#aac8d0" stroke-opacity=".3"/>
+  <path d="m445 309 105-61 106 61-106 62Z" fill="#07151e" stroke="#688d99" stroke-opacity=".4"/>
+  <path d="m453 245 97-56 97 56v79l-97 56-97-56Z" fill="url(#beam)"/>
+  <g fill="#8fbabf"><circle cx="406" cy="311" r="2"/><circle cx="550" cy="393" r="2"/><circle cx="695" cy="311" r="2"/></g>
+  <!-- The suspended verification miner. -->
+  <g class="miner" filter="url(#shadow)">
+    <path d="m453 177 97-56 97 56v122l-97 56-97-56Z" fill="#0d1d27"/>
+    <path d="m453 177 97 56v122l-97-56Z" fill="url(#glassLeft)" stroke="#9ac7cd" stroke-opacity=".6"/>
+    <path d="m550 233 97-56v122l-97 56Z" fill="url(#glassRight)" stroke="#6f9caa" stroke-opacity=".5"/>
+    <path d="m453 177 97-56 97 56-97 56Z" fill="url(#silver)" stroke="#bddbe0" stroke-opacity=".75"/>
+    <path d="m463 177 87-50 87 50-87 50Z" fill="url(#cap)" stroke="#a6c9d0" stroke-opacity=".3"/>
+    <path d="m472 177 78-45 78 45-78 45Z" fill="url(#perforation)"/>
+    <path d="m453 181 97 56 97-56" stroke="#d9f1f2" stroke-opacity=".35"/>
+    <path d="m453 286 97 56 97-56" stroke="#bafbe4" stroke-opacity=".6"/>
+    <path d="m453 293 97 56 97-56" stroke="#bafbe4" stroke-width="3" opacity=".45" filter="url(#softGlow)" class="pulse"/>
+    <path d="M550 237v112" stroke="#d1eeed" stroke-opacity=".3"/>
+    <g stroke="#a2d2d2" stroke-opacity=".18" stroke-width="1">
+      <path d="m464 211 75 43m-75-33 75 43m-75-33 75 43m-75-33 75 43m-75-33 75 43"/>
+      <path d="m562 254 72-41m-72 51 72-41m-72 51 72-41m-72 51 72-41m-72 51 72-41"/>
+    </g>
+    <path d="m457 198 93 54 93-54" stroke="#b4ffe4" stroke-opacity=".25" class="scan"/>
+    <!-- Raised verification seal, projected onto the lid. -->
+    <g transform="translate(550 175) matrix(.866 .5 -.866 .5 0 0)">
+      <rect x="-31" y="-31" width="62" height="62" rx="14" fill="#132d35" stroke="#b2e3dd" stroke-opacity=".65"/>
+      <rect x="-25" y="-25" width="50" height="50" rx="10" fill="#203e47" stroke="#8ec7cb" stroke-opacity=".15"/>
+      <path d="m-14 1 9 9 20-21" stroke="#bafbe4" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <g fill="#c7e5e6" opacity=".6"><circle cx="470" cy="177" r="1.6"/><circle cx="550" cy="130" r="1.6"/><circle cx="631" cy="177" r="1.6"/><circle cx="550" cy="223" r="1.6"/></g>
+    <text transform="translate(477 284) matrix(.866 .5 0 1 0 0)" fill="#a9d5d9" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="2">DOWNPROOF</text>
+    <g fill="#a5f5d5"><rect x="577" y="282" width="3" height="7" rx="1" transform="rotate(-30 577 282)"/><rect x="588" y="276" width="3" height="7" rx="1" transform="rotate(-30 588 276)" opacity=".6"/><rect x="599" y="270" width="3" height="7" rx="1" transform="rotate(-30 599 270)" opacity=".3"/></g>
+  </g>
+  <!-- Satellite modules and durable, readable labels. -->
+  <g transform="translate(178 244)">
+    <use href="#satellite"/>
+    <g transform="matrix(.866 .5 -.866 .5 0 -5)" stroke="#bafbe4" stroke-width="1.8"><circle r="11"/><path d="M-17 0h9l4-6 6 12 4-6h11"/></g>
+    <text x="0" y="62" text-anchor="middle" fill="#7d9ba9" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="2">PROBE</text>
+  </g>
+  <g transform="translate(862 161)">
+    <use href="#satellite"/>
+    <g transform="matrix(.866 .5 -.866 .5 0 -5)" stroke="#bbdce9" stroke-width="1.8"><rect x="-10" y="-13" width="20" height="26" rx="3"/><path d="M-5-5h10M-5 1h10M-5 7h6"/></g>
+    <text x="0" y="62" text-anchor="middle" fill="#7d9ba9" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="2">POLICY</text>
+  </g>
+  <g transform="translate(889 351)">
+    <use href="#satellite"/>
+    <g transform="matrix(.866 .5 -.866 .5 0 -5)" stroke="#bafbe4" stroke-width="1.8"><path d="M-11-10 0-15l11 5v12c0 8-11 14-11 14S-11 10-11 2Z"/><path d="m-5 0 4 4 7-8"/></g>
+    <text x="0" y="62" text-anchor="middle" fill="#7d9ba9" font-family="'IBM Plex Mono',monospace" font-size="12" letter-spacing="2">EVIDENCE</text>
+  </g>
+  <g stroke="#668d99" stroke-width=".7" stroke-opacity=".4"><path d="M115 201v-12h14M976 208v-12h-14M115 383v12h14M976 383v12h-14"/></g>
+</svg>
