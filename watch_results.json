@@ -179,6 +179,42 @@
       "breached": false,
       "summary": "https://api.github.com is UP: HTTP 200 in 12ms",
       "sla_summary": "SLA MET: service within agreed limits"
+    },
+    {
+      "checked_at": "2026-11-28T10:39:31Z",
+      "url": "https://github.com",
+      "provider": "Other",
+      "source": "public miner (free, not a paid engine purchase)",
+      "is_up": true,
+      "status_code": 200,
+      "latency_ms": 36,
+      "breached": false,
+      "summary": "https://github.com is UP: HTTP 200 in 36ms",
+      "sla_summary": "SLA MET: service within agreed limits"
+    },
+    {
+      "checked_at": "2026-11-28T10:39:31Z",
+      "url": "https://www.google.com",
+      "provider": "Other",
+      "source": "public miner (free, not a paid engine purchase)",
+      "is_up": true,
+      "status_code": 200,
+      "latency_ms": 47,
+      "breached": false,
+      "summary": "https://www.google.com is UP: HTTP 200 in 47ms",
+      "sla_summary": "SLA MET: service within agreed limits"
+    },
+    {
+      "checked_at": "2026-11-28T10:39:31Z",
+      "url": "https://api.github.com",
+      "provider": "Other",
+      "source": "public miner (free, not a paid engine purchase)",
+      "is_up": true,
+      "status_code": 200,
+      "latency_ms": 10,
+      "breached": false,
+      "summary": "https://api.github.com is UP: HTTP 200 in 10ms",
+      "sla_summary": "SLA MET: service within agreed limits"
     }
   ]
 }
